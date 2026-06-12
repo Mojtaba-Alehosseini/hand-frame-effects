@@ -1,5 +1,7 @@
 # Hand Frame Effects
 
+**Live demo:** https://mojtaba-alehosseini.github.io/hand-frame-effects/
+
 A zero-dependency, single-file webcam art app. Hold up both hands and frame a region with your thumbs and index fingers — live art effects render **only inside that window**, every frame, in real time.
 
 Pinch your hands together to cycle through effects. No install, no server — just open `index.html` in Chrome, Edge, or Firefox.
