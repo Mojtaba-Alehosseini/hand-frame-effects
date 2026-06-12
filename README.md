@@ -8,19 +8,34 @@ Pinch your hands together to cycle through effects. No install, no server — ju
 
 ---
 
-## Demo
+## Effects (15 total)
 
+### Art
 | Effect | Look |
 |---|---|
 | **Pencil Sketch** | Grayscale line drawing on white paper |
-| **Oil Paint** | Thick impasto brush strokes |
-| **Cartoon** | Flat posterized color + bold outlines |
+| **Oil Paint** | Thick impasto brush strokes (Kuwahara-style) |
+| **Cartoon** | Flat posterized color + bold Sobel outlines |
 | **Anime** | Vibrant saturation + manga screen-tone shadows |
 | **Watercolor** | Soft bleeding edges + paper texture |
-| **Van Gogh** | Swirling direction-following strokes |
+| **Van Gogh** | Swirling gradient-following brush strokes |
 | **Cross-Hatch** | Steel-engraving hatching by luminance |
-| **Wool / Knit** | Contour-following fiber weave |
+| **Wool / Knit** | Contour-following sinusoidal fiber weave |
 | **Old Master** | Warm sepia sfumato + craquelure varnish cracks |
+
+### Heavy
+| Effect | Look |
+|---|---|
+| **Neon Glow** | Colored edge lines glowing on pure black |
+| **Pixelate** | 14 px mosaic color blocks |
+| **Stippling** | Darkness-mapped dots on cream paper |
+
+### Colorful
+| Effect | Look |
+|---|---|
+| **Thermal** | Infrared heat-map (black → blue → cyan → red → white) |
+| **Pop Art** | Warhol-style extreme saturation + 4-level posterization |
+| **Psychedelic** | Time-animated hue waves with boosted saturation |
 
 ---
 
