@@ -6,29 +6,134 @@
   <title>Hand Frame Effects</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
+    /* ── DESIGN TOKENS ─────────────────────────────────────────────────────── */
+    :root {
+      --bg:            #050610;
+      --surface:       #0c0e1d;
+      --surface-2:     #131626;
+      --surface-3:     #1b1f36;
+      --glass:         rgba(255, 255, 255, 0.04);
+      --glass-border:  rgba(255, 255, 255, 0.07);
+      --glass-hover:   rgba(255, 255, 255, 0.07);
+      --accent:        #00d9ff;
+      --accent-dim:    rgba(0, 217, 255, 0.12);
+      --accent-border: rgba(0, 217, 255, 0.30);
+      --accent-glow:   rgba(0, 217, 255, 0.08);
+      --warm:          #c084fc;
+      --warm-dim:      rgba(192, 132, 252, 0.12);
+      --warm-border:   rgba(192, 132, 252, 0.25);
+      --orange:        #fb923c;
+      --orange-dim:    rgba(251, 146, 60, 0.12);
+      --orange-border: rgba(251, 146, 60, 0.25);
+      --text:          #eef2ff;
+      --text-muted:    #7480a0;
+      --text-dim:      #3d4565;
+      --radius:        14px;
+      --radius-sm:     8px;
+      --ease:          cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      background: #0b0c1a;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100dvh;
+      font-family: 'Manrope', system-ui, sans-serif;
+      background: linear-gradient(160deg, #070818 0%, #050610 60%, #020308 100%);
+      color: var(--text);
+      display: grid;
+      grid-template-rows: 52px 1fr;
+      height: 100dvh;
       overflow: hidden;
-      font-family: 'Space Grotesk', system-ui, monospace;
-      color: #f0f4ff;
     }
 
+    /* ── HEADER ──────────────────────────────────────────────────────────── */
+    #header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px 0 16px;
+      background: rgba(5, 6, 16, 0.90);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--glass-border);
+      z-index: 20;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 6px var(--accent), 0 0 18px rgba(0, 217, 255, 0.45);
+      animation: pulse-dot 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { box-shadow: 0 0 6px var(--accent), 0 0 18px rgba(0, 217, 255, 0.45); }
+      50%       { box-shadow: 0 0 10px var(--accent), 0 0 30px rgba(0, 217, 255, 0.6); }
+    }
+
+    .brand-title {
+      font-family: 'Syne', system-ui, sans-serif;
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      color: var(--text);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-tag {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 3px 10px;
+      border-radius: 20px;
+      border: 1px solid var(--glass-border);
+      background: var(--glass);
+    }
+
+    /* ── APP MAIN ────────────────────────────────────────────────────────── */
+    #app-main {
+      display: flex;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    /* ── CAMERA PANEL ────────────────────────────────────────────────────── */
+    #camera-panel {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #000;
+      overflow: hidden;
+      padding: 14px;
+    }
+
+    /* Fills the camera panel while keeping 4:3 ratio:
+       width = min(100% of panel, height-equivalent-width) */
     #container {
       position: relative;
-      width: min(640px, 100vw);
+      width: min(100%, calc((100dvh - 80px) * 4 / 3));
       aspect-ratio: 4 / 3;
     }
 
-    /* visibility:hidden, NOT display:none — MediaPipe requires the video in the render tree */
+    /* visibility:hidden keeps video in render tree — MediaPipe requires it */
     #video {
       position: absolute;
       inset: 0;
@@ -44,61 +149,356 @@
       width: 100%;
       height: 100%;
       cursor: none;
-      border-radius: 4px;
+      border-radius: 6px;
     }
 
     #status {
       position: absolute;
-      top: 14px;
+      top: 12px;
       left: 50%;
       transform: translateX(-50%);
-      color: #e2e8f0;
-      font-size: 13px;
+      color: var(--text);
+      font-family: 'Manrope', sans-serif;
+      font-size: 12px;
       font-weight: 500;
-      letter-spacing: 0.02em;
-      background: rgba(11, 12, 36, 0.78);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      letter-spacing: 0.03em;
+      white-space: nowrap;
+      background: rgba(5, 6, 16, 0.82);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       padding: 6px 16px;
       border-radius: 20px;
-      border: 1px solid rgba(0, 217, 255, 0.18);
+      border: 1px solid var(--glass-border);
       pointer-events: none;
-      transition: opacity 0.35s ease;
-      white-space: nowrap;
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4);
+      transition: opacity 0.3s var(--ease);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
     }
 
     #effect-label {
       position: absolute;
-      bottom: 22px;
+      bottom: 14px;
       left: 50%;
       transform: translateX(-50%);
-      color: #00d9ff;
-      font-size: 15px;
+      color: var(--accent);
+      font-family: 'Syne', sans-serif;
+      font-size: 13px;
       font-weight: 700;
-      letter-spacing: 3px;
-      background: rgba(11, 12, 36, 0.82);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      padding: 8px 22px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      background: rgba(5, 6, 16, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 7px 20px;
       border-radius: 20px;
-      border: 1px solid rgba(0, 217, 255, 0.35);
+      border: 1px solid var(--accent-border);
       pointer-events: none;
       opacity: 0;
-      transition: opacity 0.4s ease;
-      white-space: nowrap;
-      box-shadow: 0 0 18px rgba(0, 217, 255, 0.15), 0 2px 12px rgba(0, 0, 0, 0.4);
+      transition: opacity 0.4s var(--ease);
+      box-shadow: 0 0 20px var(--accent-glow), 0 2px 12px rgba(0, 0, 0, 0.5);
+    }
+
+    /* ── SIDEBAR ─────────────────────────────────────────────────────────── */
+    #sidebar {
+      width: 286px;
+      min-width: 286px;
+      height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+      background: var(--surface);
+      border-left: 1px solid var(--glass-border);
+      display: flex;
+      flex-direction: column;
+      scrollbar-width: thin;
+      scrollbar-color: var(--surface-3) transparent;
+    }
+
+    #sidebar::-webkit-scrollbar       { width: 3px; }
+    #sidebar::-webkit-scrollbar-track  { background: transparent; }
+    #sidebar::-webkit-scrollbar-thumb  { background: var(--surface-3); border-radius: 2px; }
+
+    /* ── SIDEBAR CARD ────────────────────────────────────────────────────── */
+    .s-card {
+      padding: 18px 16px;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    .s-card-title {
+      font-family: 'Syne', sans-serif;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 14px;
+    }
+
+    /* ── STEPS ───────────────────────────────────────────────────────────── */
+    .steps {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .step {
+      display: flex;
+      gap: 11px;
+      align-items: flex-start;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      color: var(--accent);
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .step-text {
+      font-size: 12px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .step-text strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ── GESTURE DIAGRAM ─────────────────────────────────────────────────── */
+    .gesture-hint {
+      margin-top: 14px;
+      padding: 10px 12px;
+      background: var(--glass);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .gesture-icon {
+      font-size: 22px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .gesture-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .gesture-desc span {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    /* ── EFFECTS LIST ────────────────────────────────────────────────────── */
+    .effects-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .effects-header .s-card-title { margin-bottom: 0; }
+
+    .e-counter {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--accent);
+      background: var(--accent-dim);
+      border: 1px solid var(--accent-border);
+      padding: 2px 9px;
+      border-radius: 12px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .effects-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .e-item {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      transition: background 0.18s var(--ease), border-color 0.18s var(--ease);
+      cursor: default;
+      overflow: hidden;
+    }
+
+    .e-item::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%) scaleY(0);
+      width: 3px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 0 2px 2px 0;
+      box-shadow: 0 0 8px var(--accent);
+      transition: transform 0.2s var(--ease);
+    }
+
+    .e-item:hover { background: var(--glass); }
+
+    .e-item.active {
+      background: var(--accent-dim);
+      border-color: rgba(0, 217, 255, 0.20);
+    }
+
+    .e-item.active::before { transform: translateY(-50%) scaleY(1); }
+
+    .e-num {
+      font-family: 'Syne', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-dim);
+      width: 18px;
+      text-align: right;
+      flex-shrink: 0;
+      font-variant-numeric: tabular-nums;
+      transition: color 0.18s;
+    }
+
+    .e-item.active .e-num { color: var(--accent); }
+
+    .e-name {
+      flex: 1;
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.04em;
+      transition: color 0.18s;
+    }
+
+    .e-item.active .e-name {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .e-badge {
+      font-family: 'Syne', sans-serif;
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .e-badge.art   { background: var(--accent-dim);  color: rgba(0,217,255,0.75);   border: 1px solid var(--accent-border); }
+    .e-badge.heavy { background: var(--warm-dim);    color: rgba(192,132,252,0.80); border: 1px solid var(--warm-border);   }
+    .e-badge.color { background: var(--orange-dim);  color: rgba(251,146,60,0.85);  border: 1px solid var(--orange-border); }
+
+    /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
+    @media (max-width: 680px) {
+      #app-main    { flex-direction: column; }
+      #sidebar     { width: 100%; min-width: unset; height: 200px; flex-direction: row; overflow-x: auto; overflow-y: hidden; border-left: none; border-top: 1px solid var(--glass-border); }
+      .s-card      { min-width: 220px; border-bottom: none; border-right: 1px solid var(--glass-border); flex-shrink: 0; }
+      #container   { width: 100%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .brand-dot { animation: none; }
+      * { transition-duration: 0ms !important; }
     }
   </style>
 </head>
 <body>
-  <div id="container">
-    <video id="video" autoplay muted playsinline></video>
-    <canvas id="canvas"></canvas>
-    <div id="status">Loading model…</div>
-    <div id="effect-label"></div>
-  </div>
+
+  <!-- HEADER -->
+  <header id="header">
+    <div class="brand">
+      <span class="brand-dot" aria-hidden="true"></span>
+      <span class="brand-title">HAND FRAME EFFECTS</span>
+    </div>
+    <div class="header-right">
+      <span class="header-tag">MediaPipe · Canvas 2D</span>
+    </div>
+  </header>
+
+  <!-- APP MAIN -->
+  <main id="app-main">
+
+    <!-- CAMERA PANEL -->
+    <div id="camera-panel" role="main" aria-label="Camera feed with art effects">
+      <div id="container">
+        <video id="video" autoplay muted playsinline aria-hidden="true"></video>
+        <canvas id="canvas" aria-hidden="true"></canvas>
+        <div id="status" role="status" aria-live="polite">Loading model…</div>
+        <div id="effect-label" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar" aria-label="Instructions and effects list">
+
+      <!-- HOW TO USE -->
+      <section class="s-card">
+        <h2 class="s-card-title">How to Use</h2>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num" aria-hidden="true">1</span>
+            <span class="step-text">Allow camera access when the browser asks</span>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">2</span>
+            <span class="step-text">Hold <strong>both hands up</strong>, palms facing the camera</span>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">3</span>
+            <span class="step-text">Touch <strong>thumb tip to index tip</strong> on each hand — a cyan frame appears</span>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">4</span>
+            <span class="step-text">Bring both hands together and hold <strong>~0.6 s</strong> to cycle to the next effect</span>
+          </li>
+        </ol>
+
+        <div class="gesture-hint" aria-hidden="true">
+          <span class="gesture-icon">🤏</span>
+          <span class="gesture-desc">
+            <span>Pinch gesture</span> cycles effects.<br>
+            The frame fills white as it counts down.
+          </span>
+        </div>
+      </section>
+
+      <!-- EFFECTS LIST -->
+      <section class="s-card" style="flex:1; padding-bottom: 20px;">
+        <div class="effects-header">
+          <h2 class="s-card-title">Effects</h2>
+          <span class="e-counter" id="effect-counter">1 / 15</span>
+        </div>
+        <ul class="effects-list" id="effects-list" aria-label="Available effects"></ul>
+      </section>
+
+    </aside>
+  </main>
 
   <script type="module">
     import {
@@ -106,69 +506,65 @@
       FilesetResolver,
     } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs';
 
-    // ── MediaPipe ──────────────────────────────────────────────────────────────
+    // ── EFFECT METADATA ────────────────────────────────────────────────────
+    const EFFECT_NAMES = [
+      'PENCIL SKETCH', 'OIL PAINT',    'CARTOON',    'ANIME',
+      'WATERCOLOR',    'VAN GOGH',     'CROSS-HATCH', 'WOOL',
+      'OLD MASTER',    'NEON GLOW',    'PIXELATE',    'STIPPLING',
+      'THERMAL',       'POP ART',      'PSYCHEDELIC',
+    ];
+    const EFFECT_CATS = [
+      'art','art','art','art','art','art','art','art','art',
+      'heavy','heavy','heavy',
+      'color','color','color',
+    ];
+    const CAT_LABEL = { art: 'ART', heavy: 'HEAVY', color: 'COLOR' };
+
+    // ── MEDIAPIPE ──────────────────────────────────────────────────────────
     let handLandmarker = null;
     let isModelReady   = false;
 
-    // ── DOM references ─────────────────────────────────────────────────────────
+    // ── DOM ────────────────────────────────────────────────────────────────
     const video         = document.getElementById('video');
     const canvas        = document.getElementById('canvas');
-    // willReadFrequently: keeps backing store in CPU memory, eliminating GPU↔CPU
-    // round-trips on every getCropImageData / putCropImageData call
     const ctx           = canvas.getContext('2d', { willReadFrequently: true });
     const statusEl      = document.getElementById('status');
     const effectLabelEl = document.getElementById('effect-label');
 
-    // ── Canvas dimensions (set in setupCamera) ─────────────────────────────────
-    let W = 0;
-    let H = 0;
+    // ── CANVAS DIMS ────────────────────────────────────────────────────────
+    let W = 0, H = 0;
 
-    // ── Per-frame hand data ────────────────────────────────────────────────────
+    // ── HAND DATA ──────────────────────────────────────────────────────────
     let leftHandData  = null;
     let rightHandData = null;
+    let rect          = null;
 
-    // ── Rectangle (null when < 2 hands) ───────────────────────────────────────
-    let rect = null;
-
-    // ── Gesture detection ──────────────────────────────────────────────────────
+    // ── GESTURE ────────────────────────────────────────────────────────────
     const COLLAPSE_THRESHOLD_PX  = 50;
     const COLLAPSE_FRAMES_NEEDED = 18;
     const REOPEN_THRESHOLD_PX    = 80;
-
     let collapseFrameCount = 0;
     let gestureIsOpen      = true;
 
-    // ── Effects ────────────────────────────────────────────────────────────────
-    const EFFECT_NAMES = [
-      'PENCIL SKETCH',
-      'OIL PAINT',
-      'CARTOON',
-      'ANIME',
-      'WATERCOLOR',
-      'VAN GOGH',
-      'CROSS-HATCH',
-      'WOOL',
-      'OLD MASTER',
-    ];
+    // ── EFFECTS ────────────────────────────────────────────────────────────
     let currentEffectIndex = 0;
+    let effectLabelTimer   = null;
+    let lastVideoTime      = -1;
 
-    let effectLabelTimer = null;
-    let lastVideoTime    = -1;
-
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
     // STARTUP
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
 
     async function init() {
+      buildEffectsList();
       try {
         setStatus('Loading hand tracking model…');
         await setupMediaPipe();
-
         setStatus('Starting camera…');
         await setupCamera();
-
         setStatus('');
         isModelReady = true;
+        updateEffectsList();
         startLoop();
       } catch (err) {
         setStatus('Error: ' + err.message);
@@ -176,108 +572,107 @@
       }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
+    // EFFECTS LIST DOM
+    // ══════════════════════════════════════════════════════════════════════
+
+    function buildEffectsList() {
+      const list = document.getElementById('effects-list');
+      EFFECT_NAMES.forEach((name, i) => {
+        const li = document.createElement('li');
+        li.className = 'e-item';
+        li.setAttribute('role', 'listitem');
+        li.dataset.index = i;
+        li.innerHTML =
+          `<span class="e-num">${i + 1}</span>` +
+          `<span class="e-name">${name}</span>` +
+          `<span class="e-badge ${EFFECT_CATS[i]}">${CAT_LABEL[EFFECT_CATS[i]]}</span>`;
+        list.appendChild(li);
+      });
+    }
+
+    function updateEffectsList() {
+      document.querySelectorAll('.e-item').forEach((el, i) => {
+        el.classList.toggle('active', i === currentEffectIndex);
+      });
+      document.getElementById('effect-counter').textContent =
+        `${currentEffectIndex + 1} / ${EFFECT_NAMES.length}`;
+      const active = document.querySelector('.e-item.active');
+      if (active) active.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
     // CAMERA
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
 
     async function setupCamera() {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: {
-          width:      { ideal: 640 },
-          height:     { ideal: 480 },
-          facingMode: 'user',
-          frameRate:  { ideal: 30 },
-        },
+        video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user', frameRate: { ideal: 30 } },
         audio: false,
       });
-
       video.srcObject = stream;
-
       await new Promise((resolve) => {
-        video.onloadedmetadata = () => {
-          video.play();
-          resolve();
-        };
+        video.onloadedmetadata = () => { video.play(); resolve(); };
       });
-
       W = canvas.width  = video.videoWidth;
       H = canvas.height = video.videoHeight;
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
     // MEDIAPIPE
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
 
     async function setupMediaPipe() {
       const vision = await FilesetResolver.forVisionTasks(
         'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
       );
-
       handLandmarker = await HandLandmarker.createFromOptions(vision, {
         baseOptions: {
-          modelAssetPath:
-            'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task',
+          modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task',
           delegate: 'GPU',
         },
-        runningMode:                'VIDEO',
-        numHands:                   2,
+        runningMode: 'VIDEO', numHands: 2,
         minHandDetectionConfidence: 0.5,
         minHandPresenceConfidence:  0.5,
         minTrackingConfidence:      0.5,
       });
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
     // RENDER LOOP — requestVideoFrameCallback with rAF fallback (Addendum A1)
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
 
     function startLoop() {
       function renderFrame(now) {
         if (!isModelReady) return;
 
-        // Step 1: Draw mirrored video frame
         ctx.save();
         ctx.scale(-1, 1);
         ctx.translate(-W, 0);
         ctx.drawImage(video, 0, 0, W, H);
         ctx.restore();
 
-        // Step 2: Run hand detection
         const results = handLandmarker.detectForVideo(video, now);
-
-        // Step 3: Parse landmarks
         processHandResults(results);
-
-        // Step 4: Compute rectangle
         rect = (leftHandData && rightHandData) ? computeRect() : null;
 
-        // Step 5: Gesture check
         if (rect) {
           checkCollapseGesture();
         } else {
           collapseFrameCount = 0;
-          gestureIsOpen      = true;
+          gestureIsOpen = true;
         }
 
-        // Step 6: Apply effect
-        if (rect && rect.width > 20 && rect.height > 20) {
-          applyCurrentEffect();
-        }
-
-        // Step 7: Overlays
+        if (rect && rect.width > 20 && rect.height > 20) applyCurrentEffect();
         drawOverlays();
       }
 
       if ('requestVideoFrameCallback' in HTMLVideoElement.prototype) {
-        const onVideoFrame = (now) => {
-          renderFrame(now);
-          video.requestVideoFrameCallback(onVideoFrame);
-        };
-        video.requestVideoFrameCallback(onVideoFrame);
+        const onFrame = (now) => { renderFrame(now); video.requestVideoFrameCallback(onFrame); };
+        video.requestVideoFrameCallback(onFrame);
       } else {
-        // Fallback for older browsers
-        (function rafLoop() {
-          requestAnimationFrame(rafLoop);
+        (function raf() {
+          requestAnimationFrame(raf);
           if (video.currentTime === lastVideoTime) return;
           lastVideoTime = video.currentTime;
           renderFrame(performance.now());
@@ -285,29 +680,22 @@
       }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // HAND DATA PROCESSING
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
+    // HAND PROCESSING
+    // ══════════════════════════════════════════════════════════════════════
 
     function processHandResults(results) {
-      leftHandData  = null;
-      rightHandData = null;
-
+      leftHandData = rightHandData = null;
       if (!results.landmarks || results.landmarks.length < 2) return;
-
       const hands = results.landmarks.slice(0, 2).map((lm) => ({
         thumbTip: mirroredPoint(lm[4]),
         indexTip: mirroredPoint(lm[8]),
         wrist:    mirroredPoint(lm[0]),
       }));
-
-      // Assign by wrist x-position in mirrored space (NOT handedness label)
       if (hands[0].wrist.x <= hands[1].wrist.x) {
-        leftHandData  = hands[0];
-        rightHandData = hands[1];
+        leftHandData = hands[0]; rightHandData = hands[1];
       } else {
-        leftHandData  = hands[1];
-        rightHandData = hands[0];
+        leftHandData = hands[1]; rightHandData = hands[0];
       }
     }
 
@@ -315,34 +703,25 @@
       return { x: (1 - lm.x) * W, y: lm.y * H };
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // RECTANGLE
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
+    // RECT
+    // ══════════════════════════════════════════════════════════════════════
 
     function computeRect() {
-      const pts = [
-        leftHandData.thumbTip,  leftHandData.indexTip,
-        rightHandData.thumbTip, rightHandData.indexTip,
-      ];
-      const xs = pts.map((p) => p.x);
-      const ys = pts.map((p) => p.y);
-
-      const rawX = Math.min(...xs);
-      const rawY = Math.min(...ys);
-      const rawW = Math.max(...xs) - rawX;
-      const rawH = Math.max(...ys) - rawY;
-
+      const pts = [leftHandData.thumbTip, leftHandData.indexTip,
+                   rightHandData.thumbTip, rightHandData.indexTip];
+      const xs = pts.map((p) => p.x), ys = pts.map((p) => p.y);
+      const rawX = Math.min(...xs), rawY = Math.min(...ys);
       const x = Math.max(0, Math.round(rawX));
       const y = Math.max(0, Math.round(rawY));
-      const w = Math.min(W - x, Math.round(rawW));
-      const h = Math.min(H - y, Math.round(rawH));
-
+      const w = Math.min(W - x, Math.round(Math.max(...xs) - rawX));
+      const h = Math.min(H - y, Math.round(Math.max(...ys) - rawY));
       return { x, y, width: w, height: h };
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // GESTURE DETECTION
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
+    // GESTURE
+    // ══════════════════════════════════════════════════════════════════════
 
     function checkCollapseGesture() {
       if (rect.width < COLLAPSE_THRESHOLD_PX) {
@@ -353,54 +732,53 @@
         }
       } else if (rect.width > REOPEN_THRESHOLD_PX) {
         collapseFrameCount = 0;
-        gestureIsOpen      = true;
+        gestureIsOpen = true;
       }
-      // Hysteresis zone [50–80px]: no change
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
     // EFFECT SYSTEM
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
 
     function cycleEffect() {
       currentEffectIndex = (currentEffectIndex + 1) % EFFECT_NAMES.length;
       showEffectLabel(EFFECT_NAMES[currentEffectIndex]);
+      updateEffectsList();
     }
 
     function showEffectLabel(name) {
       effectLabelEl.textContent = name;
       effectLabelEl.style.opacity = '1';
       clearTimeout(effectLabelTimer);
-      effectLabelTimer = setTimeout(() => {
-        effectLabelEl.style.opacity = '0';
-      }, 1800);
+      effectLabelTimer = setTimeout(() => { effectLabelEl.style.opacity = '0'; }, 1800);
     }
 
     function applyCurrentEffect() {
       switch (currentEffectIndex) {
-        case 0: applyPencilSketch(); break;
-        case 1: applyOilPaint();     break;
-        case 2: applyCartoon();      break;
-        case 3: applyAnime();        break;
-        case 4: applyWatercolor();   break;
-        case 5: applyVanGogh();      break;
-        case 6: applyCrossHatch();   break;
-        case 7: applyWool();         break;
-        case 8: applyOldMaster();    break;
+        case  0: applyPencilSketch(); break;
+        case  1: applyOilPaint();     break;
+        case  2: applyCartoon();      break;
+        case  3: applyAnime();        break;
+        case  4: applyWatercolor();   break;
+        case  5: applyVanGogh();      break;
+        case  6: applyCrossHatch();   break;
+        case  7: applyWool();         break;
+        case  8: applyOldMaster();    break;
+        case  9: applyNeonGlow();     break;
+        case 10: applyPixelate();     break;
+        case 11: applyStippling();    break;
+        case 12: applyThermal();      break;
+        case 13: applyPopArt();       break;
+        case 14: applyPsychedelic();  break;
       }
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
     // SHARED HELPERS
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
 
-    function getCropImageData() {
-      return ctx.getImageData(rect.x, rect.y, rect.width, rect.height);
-    }
-
-    function putCropImageData(imageData) {
-      ctx.putImageData(imageData, rect.x, rect.y);
-    }
+    const getCropImageData = () => ctx.getImageData(rect.x, rect.y, rect.width, rect.height);
+    const putCropImageData = (id) => ctx.putImageData(id, rect.x, rect.y);
 
     function toGrayscaleArray(imageData) {
       const { data, width, height } = imageData;
@@ -420,77 +798,58 @@
       }
     }
 
-    // Generalised canvas-filter helper (Addendum A3) — replaces per-pixel loops
-    // for tone/colour steps and subsumes blurImageData
+    // GPU-accelerated canvas filter helper (Addendum A3)
     function applyCanvasFilter(imageData, filterString) {
       const { width, height } = imageData;
-
       const src = document.createElement('canvas');
       src.width = width; src.height = height;
       src.getContext('2d').putImageData(imageData, 0, 0);
-
       const dst = document.createElement('canvas');
       dst.width = width; dst.height = height;
       const dstCtx = dst.getContext('2d');
       dstCtx.filter = filterString;
       dstCtx.drawImage(src, 0, 0);
       dstCtx.filter = 'none';
-
       return dstCtx.getImageData(0, 0, width, height);
     }
 
-    // Convenience wrapper kept for readability at call sites
-    function blurImageData(imageData, radiusPx) {
-      return applyCanvasFilter(imageData, `blur(${radiusPx}px)`);
-    }
+    const blurImageData = (id, r) => applyCanvasFilter(id, `blur(${r}px)`);
 
     function boxBlur(imageData, radius) {
       const { data, width, height } = imageData;
       const out = new Uint8ClampedArray(data.length);
-
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          let r = 0, g = 0, b = 0, count = 0;
+          let r = 0, g = 0, b = 0, n = 0;
           for (let dy = -radius; dy <= radius; dy++) {
             for (let dx = -radius; dx <= radius; dx++) {
               const nx = x + dx, ny = y + dy;
               if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
                 const i = (ny * width + nx) * 4;
-                r += data[i]; g += data[i + 1]; b += data[i + 2];
-                count++;
+                r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
               }
             }
           }
           const i = (y * width + x) * 4;
-          out[i]     = r / count;
-          out[i + 1] = g / count;
-          out[i + 2] = b / count;
-          out[i + 3] = data[i + 3];
+          out[i] = r / n; out[i + 1] = g / n; out[i + 2] = b / n; out[i + 3] = data[i + 3];
         }
       }
       return new ImageData(out, width, height);
     }
 
     function sobelGradient(grayArray, width, height) {
-      const gx  = new Float32Array(width * height);
-      const gy  = new Float32Array(width * height);
+      const gx = new Float32Array(width * height);
+      const gy = new Float32Array(width * height);
       const mag = new Float32Array(width * height);
-
       for (let y = 1; y < height - 1; y++) {
         for (let x = 1; x < width - 1; x++) {
-          const tl = grayArray[(y - 1) * width + (x - 1)];
-          const tc = grayArray[(y - 1) * width +  x     ];
-          const tr = grayArray[(y - 1) * width + (x + 1)];
-          const cl = grayArray[ y      * width + (x - 1)];
-          const cr = grayArray[ y      * width + (x + 1)];
-          const bl = grayArray[(y + 1) * width + (x - 1)];
-          const bc = grayArray[(y + 1) * width +  x     ];
-          const br = grayArray[(y + 1) * width + (x + 1)];
-
+          const tl = grayArray[(y-1)*width+(x-1)], tc = grayArray[(y-1)*width+x],   tr = grayArray[(y-1)*width+(x+1)];
+          const cl = grayArray[ y   *width+(x-1)],                                    cr = grayArray[ y   *width+(x+1)];
+          const bl = grayArray[(y+1)*width+(x-1)], bc = grayArray[(y+1)*width+x],   br = grayArray[(y+1)*width+(x+1)];
           const idx = y * width + x;
-          gx[idx]  = (-tl - 2 * cl - bl) + (tr + 2 * cr + br);
-          gy[idx]  = (-tl - 2 * tc - tr) + (bl + 2 * bc + br);
-          mag[idx] = Math.sqrt(gx[idx] ** 2 + gy[idx] ** 2);
+          gx[idx]  = (-tl - 2*cl - bl) + (tr + 2*cr + br);
+          gy[idx]  = (-tl - 2*tc - tr) + (bl + 2*bc + br);
+          mag[idx] = Math.sqrt(gx[idx]**2 + gy[idx]**2);
         }
       }
       return { gx, gy, magnitude: mag };
@@ -504,42 +863,44 @@
       const d = max - min;
       const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
       let h;
-      switch (max) {
-        case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
-        case g: h = ((b - r) / d + 2) / 6; break;
-        default: h = ((r - g) / d + 4) / 6;
-      }
+      if      (max === r) h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
+      else if (max === g) h = ((b - r) / d + 2) / 6;
+      else                h = ((r - g) / d + 4) / 6;
       return [h, s, l];
     }
 
     function hslToRgb(h, s, l) {
-      if (s === 0) {
-        const v = Math.round(l * 255);
-        return [v, v, v];
-      }
-      const hue2rgb = (p, q, t) => {
-        if (t < 0) t += 1;
-        if (t > 1) t -= 1;
-        if (t < 1 / 6) return p + (q - p) * 6 * t;
-        if (t < 1 / 2) return q;
-        if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
-        return p;
-      };
+      if (s === 0) { const v = Math.round(l * 255); return [v, v, v]; }
       const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
       const p = 2 * l - q;
+      const hue2rgb = (p, q, t) => {
+        if (t < 0) t += 1; if (t > 1) t -= 1;
+        if (t < 1/6) return p + (q - p) * 6 * t;
+        if (t < 1/2) return q;
+        if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+        return p;
+      };
       return [
-        Math.round(hue2rgb(p, q, h + 1 / 3) * 255),
-        Math.round(hue2rgb(p, q, h)         * 255),
-        Math.round(hue2rgb(p, q, h - 1 / 3) * 255),
+        Math.round(hue2rgb(p, q, h + 1/3) * 255),
+        Math.round(hue2rgb(p, q, h)       * 255),
+        Math.round(hue2rgb(p, q, h - 1/3) * 255),
       ];
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // EFFECTS
-    // ══════════════════════════════════════════════════════════════════════════
+    // Maps t [0,1] to rainbow heat: black/blue → cyan → green → yellow → red → white
+    function thermalColor(t) {
+      if (t < 0.125) return [0, 0, Math.round(t / 0.125 * 255)];
+      if (t < 0.375) { const s = (t - 0.125) / 0.25; return [0, Math.round(s * 255), 255]; }
+      if (t < 0.625) { const s = (t - 0.375) / 0.25; return [Math.round(s * 255), 255, Math.round((1 - s) * 255)]; }
+      if (t < 0.875) { const s = (t - 0.625) / 0.25; return [255, Math.round((1 - s) * 255), 0]; }
+      const s = (t - 0.875) / 0.125; return [255, Math.round(s * 255), Math.round(s * 255)];
+    }
 
-    // ── 1. PENCIL SKETCH ──────────────────────────────────────────────────────
-    // grayscale → invert → blur → color-dodge blend (Addendum A4: GPU compositing)
+    // ══════════════════════════════════════════════════════════════════════
+    // ── ORIGINAL 9 EFFECTS ────────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════════════════════
+
+    // 1 · PENCIL SKETCH — grayscale → invert → blur → color-dodge (Addendum A4)
     function applyPencilSketch() {
       const { width, height } = rect;
       const src = getCropImageData();
@@ -548,451 +909,443 @@
       applyGrayscaleInPlace(grayID);
 
       const invID = new ImageData(new Uint8ClampedArray(grayID.data), width, height);
-      const inv   = invID.data;
-      for (let i = 0; i < inv.length; i += 4) {
-        inv[i] = inv[i + 1] = inv[i + 2] = 255 - inv[i];
-      }
+      for (let i = 0; i < invID.data.length; i += 4)
+        invID.data[i] = invID.data[i+1] = invID.data[i+2] = 255 - invID.data[i];
 
       const blurred = blurImageData(invID, 3);
 
-      // Color-dodge blend via canvas compositeOperation (Addendum A4)
-      const bottom = document.createElement('canvas');
-      bottom.width = width; bottom.height = height;
-      bottom.getContext('2d').putImageData(grayID, 0, 0);
-
-      const top = document.createElement('canvas');
-      top.width = width; top.height = height;
+      const bot = document.createElement('canvas'); bot.width = width; bot.height = height;
+      bot.getContext('2d').putImageData(grayID, 0, 0);
+      const top = document.createElement('canvas'); top.width = width; top.height = height;
       top.getContext('2d').putImageData(blurred, 0, 0);
-
-      const out = document.createElement('canvas');
-      out.width = width; out.height = height;
-      const outCtx = out.getContext('2d');
-      outCtx.drawImage(bottom, 0, 0);
-      outCtx.globalCompositeOperation = 'color-dodge';
-      outCtx.drawImage(top, 0, 0);
-      outCtx.globalCompositeOperation = 'source-over';
-
-      putCropImageData(outCtx.getImageData(0, 0, width, height));
+      const out = document.createElement('canvas'); out.width = width; out.height = height;
+      const oc  = out.getContext('2d');
+      oc.drawImage(bot, 0, 0);
+      oc.globalCompositeOperation = 'color-dodge';
+      oc.drawImage(top, 0, 0);
+      oc.globalCompositeOperation = 'source-over';
+      putCropImageData(oc.getImageData(0, 0, width, height));
     }
 
-    // ── 2. OIL PAINT ──────────────────────────────────────────────────────────
-    // Kuwahara-style: bin neighbourhood pixels by intensity, output most-common bin
+    // 2 · OIL PAINT — Kuwahara-style neighbourhood binning
     function applyOilPaint() {
       const { width, height } = rect;
-      const src     = getCropImageData();
-      const srcData = src.data;
-      const RADIUS  = 4;
-      const LEVELS  = 20;
-      const out     = new Uint8ClampedArray(srcData.length);
+      const src = getCropImageData();
+      const sd  = src.data;
+      const RADIUS = 4, LEVELS = 20;
+      const out = new Uint8ClampedArray(sd.length);
 
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
           const counts = new Int32Array(LEVELS);
-          const rSums  = new Float32Array(LEVELS);
-          const gSums  = new Float32Array(LEVELS);
-          const bSums  = new Float32Array(LEVELS);
-
+          const rs = new Float32Array(LEVELS), gs = new Float32Array(LEVELS), bs = new Float32Array(LEVELS);
           for (let dy = -RADIUS; dy <= RADIUS; dy++) {
             for (let dx = -RADIUS; dx <= RADIUS; dx++) {
-              if (dx * dx + dy * dy > RADIUS * RADIUS) continue;
-              const nx = x + dx, ny = y + dy;
+              if (dx*dx + dy*dy > RADIUS*RADIUS) continue;
+              const nx = x+dx, ny = y+dy;
               if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
-
-              const i         = (ny * width + nx) * 4;
-              const intensity = Math.floor(
-                ((srcData[i] + srcData[i + 1] + srcData[i + 2]) / 3) *
-                (LEVELS - 1) / 255
-              );
-              counts[intensity]++;
-              rSums[intensity] += srcData[i];
-              gSums[intensity] += srcData[i + 1];
-              bSums[intensity] += srcData[i + 2];
+              const i   = (ny * width + nx) * 4;
+              const lev = Math.floor(((sd[i]+sd[i+1]+sd[i+2])/3)*(LEVELS-1)/255);
+              counts[lev]++; rs[lev] += sd[i]; gs[lev] += sd[i+1]; bs[lev] += sd[i+2];
             }
           }
-
-          let maxCount = 0, maxIdx = 0;
-          for (let l = 0; l < LEVELS; l++) {
-            if (counts[l] > maxCount) { maxCount = counts[l]; maxIdx = l; }
-          }
-
+          let mx = 0, mi = 0;
+          for (let l = 0; l < LEVELS; l++) if (counts[l] > mx) { mx = counts[l]; mi = l; }
           const oi = (y * width + x) * 4;
-          out[oi]     = rSums[maxIdx] / maxCount;
-          out[oi + 1] = gSums[maxIdx] / maxCount;
-          out[oi + 2] = bSums[maxIdx] / maxCount;
-          out[oi + 3] = 255;
+          out[oi] = rs[mi]/mx; out[oi+1] = gs[mi]/mx; out[oi+2] = bs[mi]/mx; out[oi+3] = 255;
         }
       }
-
       putCropImageData(new ImageData(out, width, height));
     }
 
-    // ── 3. CARTOON ────────────────────────────────────────────────────────────
+    // 3 · CARTOON — posterized colour + Sobel edge overlay
     function applyCartoon() {
       const { width, height } = rect;
-      const src      = getCropImageData();
-      const blurred  = boxBlur(src, 2);
-
-      const quantized = new Uint8ClampedArray(blurred.data.length);
-      for (let i = 0; i < blurred.data.length; i += 4) {
-        quantized[i]     = Math.floor(blurred.data[i]     / 42) * 42;
-        quantized[i + 1] = Math.floor(blurred.data[i + 1] / 42) * 42;
-        quantized[i + 2] = Math.floor(blurred.data[i + 2] / 42) * 42;
-        quantized[i + 3] = 255;
+      const src = getCropImageData();
+      const bl  = boxBlur(src, 2);
+      const q   = new Uint8ClampedArray(bl.data.length);
+      for (let i = 0; i < bl.data.length; i += 4) {
+        q[i] = Math.floor(bl.data[i]/42)*42; q[i+1] = Math.floor(bl.data[i+1]/42)*42;
+        q[i+2] = Math.floor(bl.data[i+2]/42)*42; q[i+3] = 255;
       }
-
-      const gray  = toGrayscaleArray(src);
-      const { magnitude } = sobelGradient(gray, width, height);
-      const EDGE_THRESHOLD = 60;
-
-      const out = new Uint8ClampedArray(quantized);
-      for (let i = 0; i < width * height; i++) {
-        if (magnitude[i] > EDGE_THRESHOLD) {
-          out[i * 4] = out[i * 4 + 1] = out[i * 4 + 2] = 0;
-        }
-      }
-
+      const { magnitude } = sobelGradient(toGrayscaleArray(src), width, height);
+      const out = new Uint8ClampedArray(q);
+      for (let i = 0; i < width*height; i++)
+        if (magnitude[i] > 60) out[i*4] = out[i*4+1] = out[i*4+2] = 0;
       putCropImageData(new ImageData(out, width, height));
     }
 
-    // ── 4. ANIME ──────────────────────────────────────────────────────────────
+    // 4 · ANIME — vivid saturation + screen-tone dots + thick outlines
     function applyAnime() {
       const { width, height } = rect;
-      const src = getCropImageData();
-
-      // Saturation boost via canvas filter (Addendum A3 — replaces per-pixel HSL loop)
-      const boostedID = applyCanvasFilter(src, 'saturate(160%)');
-      const boosted   = boostedID.data;
-
-      const quantized = new Uint8ClampedArray(boosted.length);
+      const src      = getCropImageData();
+      const boosted  = applyCanvasFilter(src, 'saturate(160%)').data;
+      const q        = new Uint8ClampedArray(boosted.length);
       for (let i = 0; i < boosted.length; i += 4) {
-        quantized[i]     = Math.floor(boosted[i]     / 32) * 32;
-        quantized[i + 1] = Math.floor(boosted[i + 1] / 32) * 32;
-        quantized[i + 2] = Math.floor(boosted[i + 2] / 32) * 32;
-        quantized[i + 3] = 255;
+        q[i] = Math.floor(boosted[i]/32)*32; q[i+1] = Math.floor(boosted[i+1]/32)*32;
+        q[i+2] = Math.floor(boosted[i+2]/32)*32; q[i+3] = 255;
       }
-
-      const gray = toGrayscaleArray(src);
-      const { magnitude } = sobelGradient(gray, width, height);
-      const EDGE_THRESHOLD = 40;
-
-      const out = new Uint8ClampedArray(quantized);
+      const { magnitude } = sobelGradient(toGrayscaleArray(src), width, height);
+      const out = new Uint8ClampedArray(q);
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          const i  = y * width + x;
-          const pi = i * 4;
-          const lum = 0.299 * out[pi] + 0.587 * out[pi + 1] + 0.114 * out[pi + 2];
-
-          if (lum < 80 && (x % 4 < 2) && (y % 4 < 2)) {
-            out[pi] = out[pi + 1] = out[pi + 2] = 20;
-          }
-          if (magnitude[i] > EDGE_THRESHOLD) {
-            out[pi] = out[pi + 1] = out[pi + 2] = 0;
-          }
+          const i = y*width+x, pi = i*4;
+          const lum = 0.299*out[pi] + 0.587*out[pi+1] + 0.114*out[pi+2];
+          if (lum < 80 && (x%4 < 2) && (y%4 < 2)) out[pi] = out[pi+1] = out[pi+2] = 20;
+          if (magnitude[i] > 40) out[pi] = out[pi+1] = out[pi+2] = 0;
         }
       }
-
       putCropImageData(new ImageData(out, width, height));
     }
 
-    // ── 5. WATERCOLOR ─────────────────────────────────────────────────────────
+    // 5 · WATERCOLOR — multi-pass blur + edge re-sharpening + paper texture
     function applyWatercolor() {
       const { width, height } = rect;
       const src = getCropImageData();
-
-      let blurred = boxBlur(src, 3);
-      blurred     = boxBlur(blurred, 2);
-      blurred     = boxBlur(blurred, 1);
-
-      const gray = toGrayscaleArray(src);
-      const { magnitude } = sobelGradient(gray, width, height);
-
-      const out = new Uint8ClampedArray(blurred.data.length);
-      for (let i = 0; i < width * height; i++) {
-        const pi       = i * 4;
-        const ef       = Math.min(1, magnitude[i] / 120) * 0.35;
-        out[pi]     = blurred.data[pi]     * (1 - ef) + src.data[pi]     * ef;
-        out[pi + 1] = blurred.data[pi + 1] * (1 - ef) + src.data[pi + 1] * ef;
-        out[pi + 2] = blurred.data[pi + 2] * (1 - ef) + src.data[pi + 2] * ef;
-        out[pi + 3] = 255;
+      let bl = boxBlur(src, 3); bl = boxBlur(bl, 2); bl = boxBlur(bl, 1);
+      const { magnitude } = sobelGradient(toGrayscaleArray(src), width, height);
+      const out = new Uint8ClampedArray(bl.data.length);
+      for (let i = 0; i < width*height; i++) {
+        const pi = i*4, ef = Math.min(1, magnitude[i]/120)*0.35;
+        out[pi]   = bl.data[pi]   *(1-ef) + src.data[pi]   *ef;
+        out[pi+1] = bl.data[pi+1] *(1-ef) + src.data[pi+1] *ef;
+        out[pi+2] = bl.data[pi+2] *(1-ef) + src.data[pi+2] *ef;
+        out[pi+3] = 255;
       }
-
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
-          const pi    = (y * width + x) * 4;
-          const noise = 0.85 + 0.15 * (0.5 + 0.5 * Math.sin(x * 17.3) * Math.sin(y * 13.7));
-          out[pi]     = Math.min(255, out[pi]     * noise + (1 - noise) * 255);
-          out[pi + 1] = Math.min(255, out[pi + 1] * noise + (1 - noise) * 255);
-          out[pi + 2] = Math.min(255, out[pi + 2] * noise + (1 - noise) * 255);
+          const pi    = (y*width+x)*4;
+          const noise = 0.85 + 0.15*(0.5 + 0.5*Math.sin(x*17.3)*Math.sin(y*13.7));
+          out[pi]   = Math.min(255, out[pi]   *noise + (1-noise)*255);
+          out[pi+1] = Math.min(255, out[pi+1] *noise + (1-noise)*255);
+          out[pi+2] = Math.min(255, out[pi+2] *noise + (1-noise)*255);
         }
       }
-
       for (let i = 0; i < out.length; i += 4) {
-        const lum = 0.299 * out[i] + 0.587 * out[i + 1] + 0.114 * out[i + 2];
-        if (lum < 90) {
-          const t = 0.4;
-          out[i]     = out[i]     * (1 - t) + lum * t;
-          out[i + 1] = out[i + 1] * (1 - t) + lum * t;
-          out[i + 2] = out[i + 2] * (1 - t) + lum * t;
-        }
+        const lum = 0.299*out[i] + 0.587*out[i+1] + 0.114*out[i+2];
+        if (lum < 90) { const t = 0.4; out[i] = out[i]*(1-t)+lum*t; out[i+1] = out[i+1]*(1-t)+lum*t; out[i+2] = out[i+2]*(1-t)+lum*t; }
       }
-
       putCropImageData(new ImageData(out, width, height));
     }
 
-    // ── 6. VAN GOGH ───────────────────────────────────────────────────────────
-    // Draws directly onto ctx — strokes run perpendicular to gradient (along edges)
+    // 6 · VAN GOGH — gradient-flow oriented brush strokes
     function applyVanGogh() {
-      const { x: rx, y: ry, width, height } = rect;
-      const src      = getCropImageData();
-      const bgBlurred = blurImageData(src, 2);
-
-      const tmpCanvas = document.createElement('canvas');
-      tmpCanvas.width = width; tmpCanvas.height = height;
-      tmpCanvas.getContext('2d').putImageData(bgBlurred, 0, 0);
-
+      const { x:rx, y:ry, width, height } = rect;
+      const src = getCropImageData();
+      const tmp = document.createElement('canvas');
+      tmp.width = width; tmp.height = height;
+      tmp.getContext('2d').putImageData(blurImageData(src, 2), 0, 0);
       ctx.save();
-      ctx.globalAlpha = 0.5;
-      ctx.drawImage(tmpCanvas, rx, ry);
-      ctx.globalAlpha = 1.0;
-
-      const gray = toGrayscaleArray(src);
-      const { gx, gy } = sobelGradient(gray, width, height);
-
-      const GRID  = 6;
-      const S_LEN = 13;
-      const S_W   = 3;
-
-      ctx.lineWidth = S_W;
-      ctx.lineCap   = 'round';
-
-      for (let y = Math.floor(GRID / 2); y < height; y += GRID) {
-        for (let x = Math.floor(GRID / 2); x < width; x += GRID) {
-          const idx   = y * width + x;
-          const pi    = idx * 4;
-          const angle = Math.atan2(gy[idx], gx[idx]) + Math.PI / 2;
-          const cos   = Math.cos(angle);
-          const sin   = Math.sin(angle);
-
-          const v = () => Math.floor((Math.random() - 0.5) * 22);
-          const r = Math.min(255, Math.max(0, src.data[pi]     + v()));
-          const g = Math.min(255, Math.max(0, src.data[pi + 1] + v()));
-          const b = Math.min(255, Math.max(0, src.data[pi + 2] + v()));
-
+      ctx.globalAlpha = 0.5; ctx.drawImage(tmp, rx, ry); ctx.globalAlpha = 1;
+      const { gx, gy } = sobelGradient(toGrayscaleArray(src), width, height);
+      ctx.lineWidth = 3; ctx.lineCap = 'round';
+      const GRID = 6, SL = 13;
+      for (let y = Math.floor(GRID/2); y < height; y += GRID) {
+        for (let x = Math.floor(GRID/2); x < width; x += GRID) {
+          const idx = y*width+x, pi = idx*4;
+          const ang = Math.atan2(gy[idx], gx[idx]) + Math.PI/2;
+          const cos = Math.cos(ang), sin = Math.sin(ang);
+          const v = () => Math.floor((Math.random()-0.5)*22);
           ctx.beginPath();
-          ctx.strokeStyle = `rgb(${r},${g},${b})`;
-          ctx.moveTo(rx + x - cos * S_LEN, ry + y - sin * S_LEN);
-          ctx.lineTo(rx + x + cos * S_LEN, ry + y + sin * S_LEN);
-          ctx.stroke();
+          ctx.strokeStyle = `rgb(${Math.min(255,Math.max(0,src.data[pi]+v()))},${Math.min(255,Math.max(0,src.data[pi+1]+v()))},${Math.min(255,Math.max(0,src.data[pi+2]+v()))})`;
+          ctx.moveTo(rx+x-cos*SL, ry+y-sin*SL); ctx.lineTo(rx+x+cos*SL, ry+y+sin*SL); ctx.stroke();
         }
       }
-
       ctx.restore();
     }
 
-    // ── 7. CROSS-HATCH ────────────────────────────────────────────────────────
-    // Steel-engraving look — hatching density driven by local luminance
+    // 7 · CROSS-HATCH — luminance-driven steel-engraving lines
     function applyCrossHatch() {
-      const { x: rx, y: ry, width, height } = rect;
+      const { x:rx, y:ry, width, height } = rect;
+      const gray = toGrayscaleArray(getCropImageData());
+      ctx.save();
+      ctx.beginPath(); ctx.rect(rx, ry, width, height); ctx.clip();
+      ctx.fillStyle = '#f5f0e8'; ctx.fillRect(rx, ry, width, height);
+      ctx.strokeStyle = '#1a1208'; ctx.lineWidth = 0.9;
+      const LAYERS = [
+        { angle: Math.PI/4,  threshold: 195 },
+        { angle: -Math.PI/4, threshold: 145 },
+        { angle: 0,          threshold: 95  },
+        { angle: Math.PI/2,  threshold: 50  },
+      ];
+      const diag = Math.ceil(Math.sqrt(width*width + height*height));
+      for (const { angle, threshold } of LAYERS) {
+        const cos = Math.cos(angle), sin = Math.sin(angle);
+        const px = -sin, py = cos;
+        for (let off = -diag; off < diag; off += 8) {
+          const ocx = width/2 + px*off, ocy = height/2 + py*off;
+          const mx = Math.round(ocx), my = Math.round(ocy);
+          if (mx < 0 || mx >= width || my < 0 || my >= height) continue;
+          if (gray[my*width+mx] >= threshold) continue;
+          ctx.beginPath();
+          ctx.moveTo(rx+ocx-cos*diag, ry+ocy-sin*diag);
+          ctx.lineTo(rx+ocx+cos*diag, ry+ocy+sin*diag); ctx.stroke();
+        }
+      }
+      ctx.restore();
+    }
+
+    // 8 · WOOL — gradient-following fiber strokes with sinusoidal wobble
+    function applyWool() {
+      const { x:rx, y:ry, width, height } = rect;
+      const src = getCropImageData();
+      const tmp = document.createElement('canvas');
+      tmp.width = width; tmp.height = height;
+      tmp.getContext('2d').putImageData(src, 0, 0);
+      ctx.save();
+      ctx.globalAlpha = 0.35; ctx.drawImage(tmp, rx, ry); ctx.globalAlpha = 1;
+      ctx.fillStyle = 'rgba(240,234,220,0.55)'; ctx.fillRect(rx, ry, width, height);
+      const { gx, gy } = sobelGradient(toGrayscaleArray(src), width, height);
+      ctx.lineWidth = 1.8; ctx.lineCap = 'round';
+      const STEP = 5, FL = 10, WOBBLE = 2.5;
+      for (let y = 0; y < height; y += STEP) {
+        for (let x = 0; x < width; x += STEP) {
+          const idx = y*width+x, pi = idx*4;
+          const ang = Math.atan2(gy[idx], gx[idx]) + Math.PI/2;
+          const cos = Math.cos(ang), sin = Math.sin(ang);
+          const pc = -sin, ps = cos;
+          const wb = WOBBLE * Math.sin(x*0.42 + y*0.31);
+          const sx = rx+x, sy = ry+y;
+          ctx.strokeStyle = `rgb(${src.data[pi]},${src.data[pi+1]},${src.data[pi+2]})`;
+          ctx.beginPath();
+          ctx.moveTo(sx-cos*FL+pc*wb, sy-sin*FL+ps*wb);
+          ctx.quadraticCurveTo(sx+pc*(wb*0.5), sy+ps*(wb*0.5), sx+cos*FL-pc*wb, sy+sin*FL-ps*wb);
+          ctx.stroke();
+        }
+      }
+      ctx.restore();
+    }
+
+    // 9 · OLD MASTER — warm sfumato + craquelure varnish cracks + grain
+    function applyOldMaster() {
+      const { width, height } = rect;
+      const src    = getCropImageData();
+      const graded = applyCanvasFilter(src, 'sepia(45%) contrast(108%) saturate(115%)');
+      const d      = graded.data;
+      const sharp  = new Uint8ClampedArray(d);
+      const blurD  = blurImageData(graded, 1.5).data;
+      for (let i = 0; i < d.length; i += 4) {
+        d[i]   = blurD[i]   *0.75 + sharp[i]   *0.25;
+        d[i+1] = blurD[i+1] *0.75 + sharp[i+1] *0.25;
+        d[i+2] = blurD[i+2] *0.75 + sharp[i+2] *0.25;
+      }
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const pi = (y*width+x)*4;
+          const c1 = Math.abs(Math.sin(x*0.15 + Math.sin(y*0.05)*10));
+          const c2 = Math.abs(Math.sin(y*0.12 + Math.sin(x*0.06)*8));
+          if (c1 < 0.06 || c2 < 0.06) {
+            d[pi] = Math.max(0,d[pi]-28); d[pi+1] = Math.max(0,d[pi+1]-20); d[pi+2] = Math.max(0,d[pi+2]-14);
+          }
+        }
+      }
+      for (let i = 0; i < d.length; i += 4) {
+        const n = (Math.random()-0.5)*14;
+        d[i]   = Math.min(255,Math.max(0,d[i]+n));
+        d[i+1] = Math.min(255,Math.max(0,d[i+1]+n*0.8));
+        d[i+2] = Math.min(255,Math.max(0,d[i+2]+n*0.55));
+      }
+      putCropImageData(graded);
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // ── 3 NEW HEAVY EFFECTS ───────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════════════════════
+
+    // 10 · NEON GLOW — colored edge lines glow on pure black background
+    function applyNeonGlow() {
+      const { width, height } = rect;
+      const src = getCropImageData();
+      const { gx, gy, magnitude } = sobelGradient(toGrayscaleArray(src), width, height);
+      const THRESH = 35;
+
+      // Build colored edge layer — non-edge pixels stay black (0,0,0,255)
+      const edgeLayer = new Uint8ClampedArray(width * height * 4);
+      for (let i = 0; i < width * height; i++) {
+        edgeLayer[i * 4 + 3] = 255; // fully opaque everywhere (for clean blur)
+        if (magnitude[i] < THRESH) continue;
+        const hue    = (Math.atan2(gy[i], gx[i]) / (Math.PI * 2) + 0.5) % 1;
+        const bright = Math.min(1, magnitude[i] / 160);
+        const [r, g, b] = hslToRgb(hue, 1, 0.45 + bright * 0.35);
+        edgeLayer[i * 4]     = r;
+        edgeLayer[i * 4 + 1] = g;
+        edgeLayer[i * 4 + 2] = b;
+      }
+
+      // Blur edge layer to produce halo glow
+      const glowID = blurImageData(new ImageData(edgeLayer, width, height), 4);
+
+      // Additive composite: glow * 1.7 + sharp edges
+      const out = new Uint8ClampedArray(width * height * 4);
+      for (let i = 0; i < width * height; i++) {
+        const pi = i * 4;
+        out[pi]     = Math.min(255, glowID.data[pi]     * 1.7 + edgeLayer[pi]);
+        out[pi + 1] = Math.min(255, glowID.data[pi + 1] * 1.7 + edgeLayer[pi + 1]);
+        out[pi + 2] = Math.min(255, glowID.data[pi + 2] * 1.7 + edgeLayer[pi + 2]);
+        out[pi + 3] = 255;
+      }
+      putCropImageData(new ImageData(out, width, height));
+    }
+
+    // 11 · PIXELATE — chunky mosaic blocks (average color per block)
+    function applyPixelate() {
+      const { width, height } = rect;
+      const src = getCropImageData();
+      const sd  = src.data;
+      const BLOCK = 14;
+      const out = new Uint8ClampedArray(sd.length);
+
+      for (let by = 0; by < height; by += BLOCK) {
+        for (let bx = 0; bx < width; bx += BLOCK) {
+          let r = 0, g = 0, b = 0, n = 0;
+          for (let dy = 0; dy < BLOCK && by+dy < height; dy++) {
+            for (let dx = 0; dx < BLOCK && bx+dx < width; dx++) {
+              const pi = ((by+dy)*width+(bx+dx))*4;
+              r += sd[pi]; g += sd[pi+1]; b += sd[pi+2]; n++;
+            }
+          }
+          r = r/n; g = g/n; b = b/n;
+          for (let dy = 0; dy < BLOCK && by+dy < height; dy++) {
+            for (let dx = 0; dx < BLOCK && bx+dx < width; dx++) {
+              const pi = ((by+dy)*width+(bx+dx))*4;
+              out[pi] = r; out[pi+1] = g; out[pi+2] = b; out[pi+3] = 255;
+            }
+          }
+        }
+      }
+      putCropImageData(new ImageData(out, width, height));
+    }
+
+    // 12 · STIPPLING — varying-radius dots on cream paper (draws to ctx directly)
+    function applyStippling() {
+      const { x:rx, y:ry, width, height } = rect;
       const src  = getCropImageData();
       const gray = toGrayscaleArray(src);
 
       ctx.save();
-      ctx.beginPath();
-      ctx.rect(rx, ry, width, height);
-      ctx.clip();
-
-      ctx.fillStyle = '#f5f0e8';
+      ctx.fillStyle = '#f9f5ec';
       ctx.fillRect(rx, ry, width, height);
+      ctx.fillStyle = '#1c160a';
 
-      ctx.strokeStyle = '#1a1208';
-      ctx.lineWidth   = 0.9;
-
-      const SPACING = 8;
-      const LAYERS  = [
-        { angle:  Math.PI / 4,  threshold: 195 },
-        { angle: -Math.PI / 4,  threshold: 145 },
-        { angle:  0,            threshold: 95  },
-        { angle:  Math.PI / 2,  threshold: 50  },
-      ];
-      const diag = Math.ceil(Math.sqrt(width * width + height * height));
-
-      for (const { angle, threshold } of LAYERS) {
-        const cos =  Math.cos(angle);
-        const sin =  Math.sin(angle);
-        const px  = -sin;
-        const py  =  cos;
-
-        for (let offset = -diag; offset < diag; offset += SPACING) {
-          const ocx = width  / 2 + px * offset;
-          const ocy = height / 2 + py * offset;
-          const mx  = Math.round(ocx);
-          const my  = Math.round(ocy);
-          if (mx < 0 || mx >= width || my < 0 || my >= height) continue;
-          if (gray[my * width + mx] >= threshold) continue;
-
-          ctx.beginPath();
-          ctx.moveTo(rx + ocx - cos * diag, ry + ocy - sin * diag);
-          ctx.lineTo(rx + ocx + cos * diag, ry + ocy + sin * diag);
-          ctx.stroke();
-        }
-      }
-
-      ctx.restore();
-    }
-
-    // ── 8. WOOL / KNIT ────────────────────────────────────────────────────────
-    // Contour-following fiber strokes with sinusoidal wobble
-    function applyWool() {
-      const { x: rx, y: ry, width, height } = rect;
-      const src = getCropImageData();
-
-      ctx.save();
-
-      const tmpCanvas = document.createElement('canvas');
-      tmpCanvas.width = width; tmpCanvas.height = height;
-      tmpCanvas.getContext('2d').putImageData(src, 0, 0);
-
-      ctx.globalAlpha = 0.35;
-      ctx.drawImage(tmpCanvas, rx, ry);
-      ctx.globalAlpha = 1.0;
-
-      ctx.fillStyle = 'rgba(240, 234, 220, 0.55)';
-      ctx.fillRect(rx, ry, width, height);
-
-      const gray = toGrayscaleArray(src);
-      const { gx, gy } = sobelGradient(gray, width, height);
-
-      const STEP   = 5;
-      const F_LEN  = 10;
-      const WOBBLE = 2.5;
-
-      ctx.lineWidth = 1.8;
-      ctx.lineCap   = 'round';
-
+      const STEP = 4;
       for (let y = 0; y < height; y += STEP) {
         for (let x = 0; x < width; x += STEP) {
-          const idx     = y * width + x;
-          const pi      = idx * 4;
-          const angle   = Math.atan2(gy[idx], gx[idx]) + Math.PI / 2;
-          const cos     = Math.cos(angle);
-          const sin     = Math.sin(angle);
-          const perpCos = -sin;
-          const perpSin =  cos;
-          const wobble  = WOBBLE * Math.sin(x * 0.42 + y * 0.31);
-          const sx      = rx + x;
-          const sy      = ry + y;
-
-          const x0 = sx - cos * F_LEN + perpCos * wobble;
-          const y0 = sy - sin * F_LEN + perpSin * wobble;
-          const xc = sx + perpCos * (wobble * 0.5);
-          const yc = sy + perpSin * (wobble * 0.5);
-          const x2 = sx + cos * F_LEN - perpCos * wobble;
-          const y2 = sy + sin * F_LEN - perpSin * wobble;
-
-          ctx.strokeStyle = `rgb(${src.data[pi]},${src.data[pi + 1]},${src.data[pi + 2]})`;
+          const darkness = 1 - gray[y * width + x] / 255;
+          if (darkness < 0.08) continue;
+          // Dot radius proportional to darkness (range 0.3 – 2.4 px)
+          const r  = darkness * 2.2 + 0.3;
+          const jx = (Math.random() - 0.5) * STEP * 0.55;
+          const jy = (Math.random() - 0.5) * STEP * 0.55;
           ctx.beginPath();
-          ctx.moveTo(x0, y0);
-          ctx.quadraticCurveTo(xc, yc, x2, y2);
-          ctx.stroke();
+          ctx.arc(rx + x + jx, ry + y + jy, r, 0, Math.PI * 2);
+          ctx.fill();
         }
       }
-
       ctx.restore();
     }
 
-    // ── 9. OLD MASTER ─────────────────────────────────────────────────────────
-    // Renaissance oil — warm grade, sfumato, craquelure, aged grain
-    function applyOldMaster() {
+    // ══════════════════════════════════════════════════════════════════════
+    // ── 3 NEW COLORFUL EFFECTS ────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════════════════════
+
+    // 13 · THERMAL — infrared heat-map (black/blue → cyan → green → yellow → red → white)
+    function applyThermal() {
       const { width, height } = rect;
-      const src = getCropImageData();
-
-      // Warm colour grade via canvas filter (Addendum A3 — replaces channel multiplies)
-      const graded = applyCanvasFilter(src, 'sepia(45%) contrast(108%) saturate(115%)');
-      const d      = graded.data;
-
-      // Sfumato: 75% blurred + 25% sharp warm grade
-      const sharpCopy  = new Uint8ClampedArray(d);
-      const blurredData = blurImageData(graded, 1.5).data;
-      for (let i = 0; i < d.length; i += 4) {
-        d[i]     = blurredData[i]     * 0.75 + sharpCopy[i]     * 0.25;
-        d[i + 1] = blurredData[i + 1] * 0.75 + sharpCopy[i + 1] * 0.25;
-        d[i + 2] = blurredData[i + 2] * 0.75 + sharpCopy[i + 2] * 0.25;
+      const src  = getCropImageData();
+      const gray = toGrayscaleArray(src);
+      const out  = new Uint8ClampedArray(src.data.length);
+      for (let i = 0; i < width * height; i++) {
+        const [r, g, b] = thermalColor(gray[i] / 255);
+        out[i*4] = r; out[i*4+1] = g; out[i*4+2] = b; out[i*4+3] = 255;
       }
-
-      // Craquelure — domain-warped sine simulates cracked varnish
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          const pi     = (y * width + x) * 4;
-          const crack1 = Math.abs(Math.sin(x * 0.15 + Math.sin(y * 0.05) * 10));
-          const crack2 = Math.abs(Math.sin(y * 0.12 + Math.sin(x * 0.06) *  8));
-          if (crack1 < 0.06 || crack2 < 0.06) {
-            d[pi]     = Math.max(0, d[pi]     - 28);
-            d[pi + 1] = Math.max(0, d[pi + 1] - 20);
-            d[pi + 2] = Math.max(0, d[pi + 2] - 14);
-          }
-        }
-      }
-
-      // Aged grain — subtle random per-pixel noise
-      for (let i = 0; i < d.length; i += 4) {
-        const noise = (Math.random() - 0.5) * 14;
-        d[i]     = Math.min(255, Math.max(0, d[i]     + noise));
-        d[i + 1] = Math.min(255, Math.max(0, d[i + 1] + noise * 0.8));
-        d[i + 2] = Math.min(255, Math.max(0, d[i + 2] + noise * 0.55));
-      }
-
-      putCropImageData(graded);
+      putCropImageData(new ImageData(out, width, height));
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
+    // 14 · POP ART — Warhol-style: extreme saturation + hard 4-level posterization
+    function applyPopArt() {
+      const { width, height } = rect;
+      const src = getCropImageData();
+      // GPU path: extreme saturation + contrast boost
+      const vivid = applyCanvasFilter(src, 'saturate(750%) contrast(180%)');
+      const d = vivid.data;
+      // Hard posterize to 4 levels per channel (creates flat color regions)
+      for (let i = 0; i < d.length; i += 4) {
+        d[i]   = Math.floor(d[i]   / 64) * 85;
+        d[i+1] = Math.floor(d[i+1] / 64) * 85;
+        d[i+2] = Math.floor(d[i+2] / 64) * 85;
+        d[i+3] = 255;
+      }
+      putCropImageData(vivid);
+    }
+
+    // 15 · PSYCHEDELIC — time-animated hue waves + boosted saturation
+    function applyPsychedelic() {
+      const { width, height } = rect;
+      const src = getCropImageData();
+      const d   = src.data;
+      const out = new Uint8ClampedArray(d.length);
+      // Slow time drift: creates organic color cycling when holding still
+      const t = performance.now() * 0.0012;
+
+      for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+          const pi = (y * width + x) * 4;
+          const [h, s, l] = rgbToHsl(d[pi], d[pi+1], d[pi+2]);
+          // Hue shift: position waves + time drift
+          const shift = Math.sin(x * 0.038 + l * 7 + t)          * 0.13
+                      + Math.cos(y * 0.032 + l * 5 + t * 0.65)   * 0.10
+                      + x / (width  * 3.5)
+                      + y / (height * 3.5);
+          const newH = (h + shift + 2) % 1;
+          const newS = Math.min(1, s * 1.6 + 0.35);
+          const [r, g, b] = hslToRgb(newH, newS, l);
+          out[pi] = r; out[pi+1] = g; out[pi+2] = b; out[pi+3] = 255;
+        }
+      }
+      putCropImageData(new ImageData(out, width, height));
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
     // OVERLAYS
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
 
     function drawOverlays() {
       if (!rect || rect.width <= 20 || rect.height <= 20) {
-        if (leftHandData || rightHandData) {
-          setStatus('Show both hands with palm open');
-        } else {
-          setStatus('Hold both hands up, palms facing camera');
-        }
+        setStatus(leftHandData || rightHandData
+          ? 'Show both hands with palm open'
+          : 'Hold both hands up, palms facing camera');
         return;
       }
       setStatus('');
 
       ctx.save();
 
-      // Dashed rectangle — cyan tint
+      // Dashed cyan rectangle
       ctx.strokeStyle = 'rgba(0, 217, 255, 0.82)';
       ctx.lineWidth   = 2;
       ctx.setLineDash([6, 4]);
       ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
       ctx.setLineDash([]);
 
-      // Fingertip corner dots — cyan
-      const tipPts = [
+      // Fingertip dots — solid cyan with outer ring
+      const tips = [
         leftHandData.thumbTip,  leftHandData.indexTip,
         rightHandData.thumbTip, rightHandData.indexTip,
       ];
-      for (const pt of tipPts) {
-        ctx.beginPath();
-        ctx.arc(pt.x, pt.y, 5.5, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 217, 255, 0.95)';
-        ctx.fill();
-        // subtle outer ring
-        ctx.beginPath();
-        ctx.arc(pt.x, pt.y, 8, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(0, 217, 255, 0.35)';
-        ctx.lineWidth   = 1.5;
-        ctx.stroke();
+      for (const pt of tips) {
+        ctx.beginPath(); ctx.arc(pt.x, pt.y, 5.5, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(0, 217, 255, 0.95)'; ctx.fill();
+        ctx.beginPath(); ctx.arc(pt.x, pt.y, 9, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(0, 217, 255, 0.30)'; ctx.lineWidth = 1.5; ctx.stroke();
       }
 
-      // Collapse progress — cyan fill bleeds in
+      // Collapse-progress fill (cyan tint grows as hands converge)
       if (collapseFrameCount > 0) {
-        const progress = Math.min(1, collapseFrameCount / COLLAPSE_FRAMES_NEEDED);
-        ctx.globalAlpha = progress * 0.28;
+        const p = Math.min(1, collapseFrameCount / COLLAPSE_FRAMES_NEEDED);
+        ctx.globalAlpha = p * 0.28;
         ctx.fillStyle   = '#00d9ff';
         ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
-        ctx.globalAlpha = 1.0;
+        ctx.globalAlpha = 1;
       }
 
       ctx.restore();
@@ -1000,12 +1353,10 @@
 
     function setStatus(text) {
       statusEl.textContent   = text;
-      statusEl.style.opacity = text.length > 0 ? '1' : '0';
+      statusEl.style.opacity = text ? '1' : '0';
     }
 
-    // ══════════════════════════════════════════════════════════════════════════
-    // GO
-    // ══════════════════════════════════════════════════════════════════════════
+    // ══════════════════════════════════════════════════════════════════════
     init();
   </script>
 </body>
