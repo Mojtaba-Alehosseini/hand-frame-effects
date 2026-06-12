@@ -8,423 +8,400 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet" />
   <style>
-    /* ── DESIGN TOKENS ─────────────────────────────────────────────────────── */
+    /* ── DESIGN TOKENS ──────────────────────────────────────────────────── */
     :root {
       --bg:            #050610;
       --surface:       #0c0e1d;
       --surface-2:     #131626;
       --surface-3:     #1b1f36;
-      --glass:         rgba(255, 255, 255, 0.04);
-      --glass-border:  rgba(255, 255, 255, 0.07);
-      --glass-hover:   rgba(255, 255, 255, 0.07);
+      --glass:         rgba(255,255,255,0.04);
+      --glass-border:  rgba(255,255,255,0.07);
       --accent:        #00d9ff;
-      --accent-dim:    rgba(0, 217, 255, 0.12);
-      --accent-border: rgba(0, 217, 255, 0.30);
-      --accent-glow:   rgba(0, 217, 255, 0.08);
+      --accent-dim:    rgba(0,217,255,0.12);
+      --accent-border: rgba(0,217,255,0.30);
+      --accent-glow:   rgba(0,217,255,0.08);
       --warm:          #c084fc;
-      --warm-dim:      rgba(192, 132, 252, 0.12);
-      --warm-border:   rgba(192, 132, 252, 0.25);
+      --warm-dim:      rgba(192,132,252,0.12);
+      --warm-border:   rgba(192,132,252,0.25);
       --orange:        #fb923c;
-      --orange-dim:    rgba(251, 146, 60, 0.12);
-      --orange-border: rgba(251, 146, 60, 0.25);
+      --orange-dim:    rgba(251,146,60,0.12);
+      --orange-border: rgba(251,146,60,0.25);
       --text:          #eef2ff;
       --text-muted:    #7480a0;
       --text-dim:      #3d4565;
       --radius:        14px;
       --radius-sm:     8px;
-      --ease:          cubic-bezier(0.16, 1, 0.3, 1);
+      --ease:          cubic-bezier(0.16,1,0.3,1);
+      --header-h:      52px;
     }
 
-    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+    html { height: 100%; }
 
     body {
       font-family: 'Manrope', system-ui, sans-serif;
       background: linear-gradient(160deg, #070818 0%, #050610 60%, #020308 100%);
       color: var(--text);
       display: grid;
-      grid-template-rows: 52px 1fr;
+      grid-template-rows: var(--header-h) 1fr;
       height: 100dvh;
       overflow: hidden;
     }
 
-    /* ── HEADER ──────────────────────────────────────────────────────────── */
+    /* ── HEADER ─────────────────────────────────────────────────────────── */
     #header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0 20px 0 16px;
-      background: rgba(5, 6, 16, 0.90);
+      background: rgba(5,6,16,0.90);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--glass-border);
       z-index: 20;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .brand { display:flex; align-items:center; gap:10px; }
 
     .brand-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
+      width:8px; height:8px; border-radius:50%;
       background: var(--accent);
-      box-shadow: 0 0 6px var(--accent), 0 0 18px rgba(0, 217, 255, 0.45);
+      box-shadow: 0 0 6px var(--accent), 0 0 18px rgba(0,217,255,0.45);
       animation: pulse-dot 3s ease-in-out infinite;
+      flex-shrink: 0;
     }
 
     @keyframes pulse-dot {
-      0%, 100% { box-shadow: 0 0 6px var(--accent), 0 0 18px rgba(0, 217, 255, 0.45); }
-      50%       { box-shadow: 0 0 10px var(--accent), 0 0 30px rgba(0, 217, 255, 0.6); }
+      0%,100% { box-shadow: 0 0 6px var(--accent), 0 0 18px rgba(0,217,255,0.45); }
+      50%      { box-shadow: 0 0 10px var(--accent), 0 0 30px rgba(0,217,255,0.6); }
     }
 
     .brand-title {
       font-family: 'Syne', system-ui, sans-serif;
-      font-size: 13px;
-      font-weight: 800;
-      letter-spacing: 0.14em;
-      color: var(--text);
+      font-size: 13px; font-weight: 800;
+      letter-spacing: 0.14em; color: var(--text);
     }
 
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .header-right { display:flex; align-items:center; gap:12px; }
 
     .header-tag {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.10em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      padding: 3px 10px;
-      border-radius: 20px;
-      border: 1px solid var(--glass-border);
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--text-dim); padding: 3px 10px;
+      border-radius: 20px; border: 1px solid var(--glass-border);
       background: var(--glass);
     }
 
     /* ── APP MAIN ────────────────────────────────────────────────────────── */
-    #app-main {
-      display: flex;
-      overflow: hidden;
-      min-height: 0;
-    }
+    #app-main { display:flex; overflow:hidden; min-height:0; height:100%; }
 
     /* ── CAMERA PANEL ────────────────────────────────────────────────────── */
     #camera-panel {
-      flex: 1;
-      min-width: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #000;
-      overflow: hidden;
-      padding: 14px;
+      flex:1; min-width:0;
+      display:flex; align-items:center; justify-content:center;
+      background:#000; overflow:hidden; padding:14px;
     }
 
-    /* Fills the camera panel while keeping 4:3 ratio:
-       width = min(100% of panel, height-equivalent-width) */
     #container {
-      position: relative;
-      width: min(100%, calc((100dvh - 80px) * 4 / 3));
-      aspect-ratio: 4 / 3;
+      position:relative;
+      width: min(100%, calc((100dvh - var(--header-h) - 28px) * 4 / 3));
+      aspect-ratio: 4/3;
     }
 
-    /* visibility:hidden keeps video in render tree — MediaPipe requires it */
     #video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      visibility: hidden;
+      position:absolute; inset:0; width:100%; height:100%;
+      object-fit:cover; visibility:hidden;
     }
 
     #canvas {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      cursor: none;
-      border-radius: 6px;
+      position:absolute; inset:0; width:100%; height:100%;
+      cursor:none; border-radius:6px;
     }
 
     #status {
-      position: absolute;
-      top: 12px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--text);
-      font-family: 'Manrope', sans-serif;
-      font-size: 12px;
-      font-weight: 500;
-      letter-spacing: 0.03em;
-      white-space: nowrap;
-      background: rgba(5, 6, 16, 0.82);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      padding: 6px 16px;
-      border-radius: 20px;
-      border: 1px solid var(--glass-border);
-      pointer-events: none;
-      transition: opacity 0.3s var(--ease);
-      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+      position:absolute; top:12px; left:50%; transform:translateX(-50%);
+      color:var(--text);
+      font-family:'Manrope',sans-serif; font-size:12px; font-weight:500;
+      letter-spacing:0.03em; white-space:nowrap;
+      background:rgba(5,6,16,0.82);
+      backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+      padding:6px 16px; border-radius:20px;
+      border:1px solid var(--glass-border);
+      pointer-events:none; transition:opacity 0.3s var(--ease);
+      box-shadow:0 2px 12px rgba(0,0,0,0.5);
     }
 
     #effect-label {
-      position: absolute;
-      bottom: 14px;
-      left: 50%;
-      transform: translateX(-50%);
-      color: var(--accent);
-      font-family: 'Syne', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      background: rgba(5, 6, 16, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      padding: 7px 20px;
-      border-radius: 20px;
-      border: 1px solid var(--accent-border);
-      pointer-events: none;
-      opacity: 0;
-      transition: opacity 0.4s var(--ease);
-      box-shadow: 0 0 20px var(--accent-glow), 0 2px 12px rgba(0, 0, 0, 0.5);
+      position:absolute; bottom:14px; left:50%; transform:translateX(-50%);
+      color:var(--accent);
+      font-family:'Syne',sans-serif; font-size:13px; font-weight:700;
+      letter-spacing:0.16em; text-transform:uppercase; white-space:nowrap;
+      background:rgba(5,6,16,0.88);
+      backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
+      padding:7px 20px; border-radius:20px;
+      border:1px solid var(--accent-border);
+      pointer-events:none; opacity:0;
+      transition:opacity 0.4s var(--ease);
+      box-shadow:0 0 20px var(--accent-glow), 0 2px 12px rgba(0,0,0,0.5);
     }
 
     /* ── SIDEBAR ─────────────────────────────────────────────────────────── */
     #sidebar {
-      width: 286px;
-      min-width: 286px;
-      height: 100%;
-      overflow-y: auto;
-      overflow-x: hidden;
-      background: var(--surface);
-      border-left: 1px solid var(--glass-border);
-      display: flex;
-      flex-direction: column;
-      scrollbar-width: thin;
-      scrollbar-color: var(--surface-3) transparent;
+      width:286px; min-width:286px; height:100%;
+      overflow-y:auto; overflow-x:hidden;
+      background:var(--surface);
+      border-left:1px solid var(--glass-border);
+      display:flex; flex-direction:column;
+      scrollbar-width:thin; scrollbar-color:var(--surface-3) transparent;
     }
 
-    #sidebar::-webkit-scrollbar       { width: 3px; }
-    #sidebar::-webkit-scrollbar-track  { background: transparent; }
-    #sidebar::-webkit-scrollbar-thumb  { background: var(--surface-3); border-radius: 2px; }
+    #sidebar::-webkit-scrollbar       { width:3px; }
+    #sidebar::-webkit-scrollbar-track  { background:transparent; }
+    #sidebar::-webkit-scrollbar-thumb  { background:var(--surface-3); border-radius:2px; }
+
+    /* ── MOBILE TABS (hidden on desktop) ────────────────────────────────── */
+    #mobile-tabs { display:none; }
 
     /* ── SIDEBAR CARD ────────────────────────────────────────────────────── */
-    .s-card {
-      padding: 18px 16px;
-      border-bottom: 1px solid var(--glass-border);
-    }
+    .s-card { padding:16px; border-bottom:1px solid var(--glass-border); }
 
     .s-card-title {
-      font-family: 'Syne', sans-serif;
-      font-size: 9px;
-      font-weight: 700;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-      margin-bottom: 14px;
+      font-family:'Syne',sans-serif; font-size:9px; font-weight:700;
+      letter-spacing:0.18em; text-transform:uppercase;
+      color:var(--text-dim); margin-bottom:14px;
     }
 
     /* ── STEPS ───────────────────────────────────────────────────────────── */
-    .steps {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .steps { list-style:none; display:flex; flex-direction:column; gap:11px; }
 
-    .step {
-      display: flex;
-      gap: 11px;
-      align-items: flex-start;
-    }
+    .step { display:flex; gap:11px; align-items:flex-start; }
 
     .step-num {
-      flex-shrink: 0;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
-      color: var(--accent);
-      font-family: 'Syne', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 1px;
-      flex-shrink: 0;
+      flex-shrink:0; width:22px; height:22px; border-radius:50%;
+      background:var(--accent-dim); border:1px solid var(--accent-border);
+      color:var(--accent);
+      font-family:'Syne',sans-serif; font-size:10px; font-weight:700;
+      display:flex; align-items:center; justify-content:center;
+      margin-top:1px;
     }
 
     .step-text {
-      font-size: 12px;
-      line-height: 1.6;
-      color: var(--text-muted);
-      font-weight: 400;
+      font-size:12px; line-height:1.6;
+      color:var(--text-muted); font-weight:400;
     }
 
-    .step-text strong {
-      color: var(--text);
-      font-weight: 600;
+    .step-text strong { color:var(--text); font-weight:600; }
+
+    /* ── DEMO VIDEO ──────────────────────────────────────────────────────── */
+    .demo-wrap {
+      margin-top:14px;
+      border-radius:var(--radius-sm);
+      overflow:hidden;
+      border:1px solid var(--glass-border);
+      background:#000;
+      position:relative;
     }
 
-    /* ── GESTURE DIAGRAM ─────────────────────────────────────────────────── */
+    .demo-vid {
+      width:100%; display:block;
+      aspect-ratio:16/9; object-fit:cover;
+    }
+
+    .demo-caption {
+      padding:7px 10px;
+      font-size:10px; font-weight:500;
+      color:var(--text-muted); line-height:1.4;
+      background:var(--surface-2);
+      border-top:1px solid var(--glass-border);
+    }
+
+    .demo-caption span { color:var(--accent); font-weight:600; }
+
+    /* ── GESTURE HINT (desktop-only supplement) ──────────────────────────── */
     .gesture-hint {
-      margin-top: 14px;
-      padding: 10px 12px;
-      background: var(--glass);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-sm);
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      margin-top:12px; padding:9px 12px;
+      background:var(--glass); border:1px solid var(--glass-border);
+      border-radius:var(--radius-sm);
+      display:flex; align-items:center; gap:10px;
     }
 
     .gesture-icon {
-      font-size: 22px;
-      line-height: 1;
-      flex-shrink: 0;
+      flex-shrink:0; width:22px; height:22px;
+      color:var(--accent); opacity:0.85;
     }
 
-    .gesture-desc {
-      font-size: 11px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
+    .gesture-desc { font-size:11px; color:var(--text-muted); line-height:1.5; }
+    .gesture-desc span { color:var(--accent); font-weight:600; }
 
-    .gesture-desc span {
-      color: var(--accent);
-      font-weight: 600;
+    /* ── EFFECTS HEADER ──────────────────────────────────────────────────── */
+    .effects-header {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:10px;
+    }
+    .effects-header .s-card-title { margin-bottom:0; }
+
+    .e-counter {
+      font-family:'Syne',sans-serif; font-size:10px; font-weight:700;
+      color:var(--accent); background:var(--accent-dim);
+      border:1px solid var(--accent-border);
+      padding:2px 9px; border-radius:12px;
+      font-variant-numeric:tabular-nums;
     }
 
     /* ── EFFECTS LIST ────────────────────────────────────────────────────── */
-    .effects-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .effects-header .s-card-title { margin-bottom: 0; }
-
-    .e-counter {
-      font-family: 'Syne', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--accent);
-      background: var(--accent-dim);
-      border: 1px solid var(--accent-border);
-      padding: 2px 9px;
-      border-radius: 12px;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .effects-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    .effects-list { list-style:none; display:flex; flex-direction:column; gap:2px; }
 
     .e-item {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: var(--radius-sm);
-      border: 1px solid transparent;
-      transition: background 0.18s var(--ease), border-color 0.18s var(--ease);
-      cursor: default;
-      overflow: hidden;
+      position:relative;
+      display:flex; align-items:center; gap:8px;
+      padding:9px 10px; min-height:44px;
+      border-radius:var(--radius-sm); border:1px solid transparent;
+      cursor:pointer; overflow:hidden;
+      transition:background 0.18s var(--ease), border-color 0.18s var(--ease);
+      touch-action:manipulation;
+      -webkit-tap-highlight-color: transparent;
+      user-select:none;
     }
 
     .e-item::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%) scaleY(0);
-      width: 3px;
-      height: 18px;
-      background: var(--accent);
-      border-radius: 0 2px 2px 0;
-      box-shadow: 0 0 8px var(--accent);
-      transition: transform 0.2s var(--ease);
+      content:''; position:absolute; left:0; top:50%;
+      transform:translateY(-50%) scaleY(0);
+      width:3px; height:18px;
+      background:var(--accent); border-radius:0 2px 2px 0;
+      box-shadow:0 0 8px var(--accent);
+      transition:transform 0.2s var(--ease);
     }
 
-    .e-item:hover { background: var(--glass); }
+    .e-item:hover { background:var(--glass); }
+
+    .e-item:active { background:rgba(0,217,255,0.08); transform:scale(0.98); }
 
     .e-item.active {
-      background: var(--accent-dim);
-      border-color: rgba(0, 217, 255, 0.20);
+      background:var(--accent-dim);
+      border-color:rgba(0,217,255,0.20);
     }
 
-    .e-item.active::before { transform: translateY(-50%) scaleY(1); }
+    .e-item.active::before { transform:translateY(-50%) scaleY(1); }
 
     .e-num {
-      font-family: 'Syne', sans-serif;
-      font-size: 10px;
-      font-weight: 700;
-      color: var(--text-dim);
-      width: 18px;
-      text-align: right;
-      flex-shrink: 0;
-      font-variant-numeric: tabular-nums;
-      transition: color 0.18s;
+      font-family:'Syne',sans-serif; font-size:10px; font-weight:700;
+      color:var(--text-dim); width:18px; text-align:right;
+      flex-shrink:0; font-variant-numeric:tabular-nums;
+      transition:color 0.18s;
     }
 
-    .e-item.active .e-num { color: var(--accent); }
+    .e-item.active .e-num { color:var(--accent); }
 
     .e-name {
-      flex: 1;
-      font-size: 11.5px;
-      font-weight: 500;
-      color: var(--text-muted);
-      letter-spacing: 0.04em;
-      transition: color 0.18s;
+      flex:1; font-size:12px; font-weight:500;
+      color:var(--text-muted); letter-spacing:0.04em;
+      transition:color 0.18s;
     }
 
-    .e-item.active .e-name {
-      color: var(--text);
-      font-weight: 600;
-    }
+    .e-item.active .e-name { color:var(--text); font-weight:600; }
 
     .e-badge {
-      font-family: 'Syne', sans-serif;
-      font-size: 8.5px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 2px 6px;
-      border-radius: 4px;
-      flex-shrink: 0;
+      font-family:'Syne',sans-serif; font-size:8.5px; font-weight:700;
+      letter-spacing:0.08em; text-transform:uppercase;
+      padding:2px 6px; border-radius:4px; flex-shrink:0;
     }
 
-    .e-badge.art   { background: var(--accent-dim);  color: rgba(0,217,255,0.75);   border: 1px solid var(--accent-border); }
-    .e-badge.heavy { background: var(--warm-dim);    color: rgba(192,132,252,0.80); border: 1px solid var(--warm-border);   }
-    .e-badge.color { background: var(--orange-dim);  color: rgba(251,146,60,0.85);  border: 1px solid var(--orange-border); }
+    .e-badge.art   { background:var(--accent-dim);  color:rgba(0,217,255,0.75);   border:1px solid var(--accent-border); }
+    .e-badge.heavy { background:var(--warm-dim);    color:rgba(192,132,252,0.80); border:1px solid var(--warm-border);   }
+    .e-badge.color { background:var(--orange-dim);  color:rgba(251,146,60,0.85);  border:1px solid var(--orange-border); }
 
-    /* ── RESPONSIVE ──────────────────────────────────────────────────────── */
-    @media (max-width: 680px) {
-      #app-main    { flex-direction: column; }
-      #sidebar     { width: 100%; min-width: unset; height: 200px; flex-direction: row; overflow-x: auto; overflow-y: hidden; border-left: none; border-top: 1px solid var(--glass-border); }
-      .s-card      { min-width: 220px; border-bottom: none; border-right: 1px solid var(--glass-border); flex-shrink: 0; }
-      #container   { width: 100%; }
+    /* ── MOBILE LAYOUT (≤ 768px) ─────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      body {
+        grid-template-rows: var(--header-h) 1fr;
+        height: 100dvh;
+        overflow: hidden;
+      }
+
+      #app-main {
+        flex-direction: column;
+        overflow: hidden;
+        height: 100%;
+      }
+
+      #camera-panel {
+        flex: none;
+        width: 100%;
+        padding: 0;
+        /* Camera fills full width; height = width * 3/4 */
+        aspect-ratio: 4/3;
+        height: auto;
+        max-height: 56dvh;
+      }
+
+      #container {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: unset;
+      }
+
+      /* Bottom panel: tabs + content */
+      #sidebar {
+        flex: 1;
+        width: 100%;
+        min-width: unset;
+        height: auto;
+        min-height: 0;
+        border-left: none;
+        border-top: 1px solid var(--glass-border);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Tab bar */
+      #mobile-tabs {
+        display: flex;
+        flex-shrink: 0;
+        border-bottom: 1px solid var(--glass-border);
+      }
+
+      .m-tab {
+        flex: 1; padding: 11px 8px;
+        background: none; border: none;
+        border-bottom: 2px solid transparent;
+        font-family: 'Syne', sans-serif;
+        font-size: 10px; font-weight: 700;
+        letter-spacing: 0.14em; text-transform: uppercase;
+        color: var(--text-muted);
+        cursor: pointer;
+        transition: color 0.18s, border-color 0.18s;
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+        min-height: 44px; display: flex; align-items: center; justify-content: center;
+      }
+
+      .m-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+      /* Tab panes */
+      .s-card { display: none; overflow-y: auto; flex: 1; }
+      .s-card.tab-active { display: block; }
+
+      /* Effects card when active needs scroll */
+      #s-card-effects.tab-active {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        min-height: 0;
+      }
+
+      #s-card-effects.tab-active .effects-list-wrap {
+        flex: 1; overflow-y: auto; min-height: 0;
+      }
+
+      .demo-vid { aspect-ratio: 16/9; max-height: 140px; }
     }
 
+    /* ── REDUCED MOTION ──────────────────────────────────────────────────── */
     @media (prefers-reduced-motion: reduce) {
-      .brand-dot { animation: none; }
-      * { transition-duration: 0ms !important; }
+      .brand-dot { animation:none; }
+      * { transition-duration:0ms !important; }
     }
   </style>
 </head>
@@ -445,7 +422,7 @@
   <main id="app-main">
 
     <!-- CAMERA PANEL -->
-    <div id="camera-panel" role="main" aria-label="Camera feed with art effects">
+    <div id="camera-panel" role="region" aria-label="Camera feed with art effects">
       <div id="container">
         <video id="video" autoplay muted playsinline aria-hidden="true"></video>
         <canvas id="canvas" aria-hidden="true"></canvas>
@@ -457,13 +434,28 @@
     <!-- SIDEBAR -->
     <aside id="sidebar" aria-label="Instructions and effects list">
 
+      <!-- MOBILE TAB BAR (hidden on desktop via CSS) -->
+      <div id="mobile-tabs" role="tablist" aria-label="Sidebar sections">
+        <button class="m-tab active" role="tab" aria-selected="true"
+                aria-controls="s-card-guide" id="tab-guide"
+                onclick="switchTab('guide')">
+          Guide
+        </button>
+        <button class="m-tab" role="tab" aria-selected="false"
+                aria-controls="s-card-effects" id="tab-effects"
+                onclick="switchTab('effects')">
+          Effects
+        </button>
+      </div>
+
       <!-- HOW TO USE -->
-      <section class="s-card">
+      <section class="s-card tab-active" id="s-card-guide"
+               role="tabpanel" aria-labelledby="tab-guide">
         <h2 class="s-card-title">How to Use</h2>
         <ol class="steps">
           <li class="step">
             <span class="step-num" aria-hidden="true">1</span>
-            <span class="step-text">Allow camera access when the browser asks</span>
+            <span class="step-text">Allow <strong>camera access</strong> when the browser asks</span>
           </li>
           <li class="step">
             <span class="step-num" aria-hidden="true">2</span>
@@ -471,34 +463,80 @@
           </li>
           <li class="step">
             <span class="step-num" aria-hidden="true">3</span>
-            <span class="step-text">Touch <strong>thumb tip to index tip</strong> on each hand — a cyan frame appears</span>
+            <span class="step-text">Touch <strong>thumb tip to index tip</strong> on each hand — a cyan frame appears inside</span>
           </li>
           <li class="step">
             <span class="step-num" aria-hidden="true">4</span>
-            <span class="step-text">Bring both hands together and hold <strong>~0.6 s</strong> to cycle to the next effect</span>
+            <span class="step-text">Bring hands together until index tips touch — hold <strong>~0.6 s</strong> to cycle effect, or <strong>tap an effect</strong> below</span>
           </li>
         </ol>
 
+        <!-- DEMO VIDEO -->
+        <div class="demo-wrap" aria-label="Gesture demonstration video">
+          <video class="demo-vid" autoplay muted loop playsinline
+                 aria-label="Cartoon hands forming a rectangle then joining to cycle the effect color">
+            <source src="demo.mp4" type="video/mp4" />
+          </video>
+          <div class="demo-caption">
+            Hands together <span>~0.6 s</span> → cycles to next effect
+          </div>
+        </div>
+
+        <!-- GESTURE HINT -->
         <div class="gesture-hint" aria-hidden="true">
-          <span class="gesture-icon">🤏</span>
+          <!-- pinch SVG icon -->
+          <svg class="gesture-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"
+               aria-hidden="true">
+            <path d="M9 11V6a2 2 0 0 1 4 0v5"/>
+            <path d="M13 11V8a2 2 0 0 1 4 0v6a6 6 0 0 1-6 6H9a6 6 0 0 1-6-6v-1a2 2 0 0 1 4 0"/>
+            <path d="M5 14v-1"/>
+          </svg>
           <span class="gesture-desc">
             <span>Pinch gesture</span> cycles effects.<br>
-            The frame fills white as it counts down.
+            Frame fills cyan as it counts down.
           </span>
         </div>
       </section>
 
       <!-- EFFECTS LIST -->
-      <section class="s-card" style="flex:1; padding-bottom: 20px;">
+      <section class="s-card" id="s-card-effects"
+               role="tabpanel" aria-labelledby="tab-effects"
+               style="flex:1; padding-bottom:20px;">
         <div class="effects-header">
           <h2 class="s-card-title">Effects</h2>
           <span class="e-counter" id="effect-counter">1 / 15</span>
         </div>
-        <ul class="effects-list" id="effects-list" aria-label="Available effects"></ul>
+        <div class="effects-list-wrap">
+          <ul class="effects-list" id="effects-list"
+              aria-label="Available effects — click or tap to select"></ul>
+        </div>
       </section>
 
     </aside>
   </main>
+
+  <script>
+    /* ── MOBILE TAB SWITCHING ─────────────────────────────────────────────── */
+    function switchTab(which) {
+      const guide   = document.getElementById('s-card-guide');
+      const effects = document.getElementById('s-card-effects');
+      const tGuide  = document.getElementById('tab-guide');
+      const tEffects= document.getElementById('tab-effects');
+
+      if (which === 'guide') {
+        guide.classList.add('tab-active');
+        effects.classList.remove('tab-active');
+        tGuide.classList.add('active');   tGuide.setAttribute('aria-selected','true');
+        tEffects.classList.remove('active'); tEffects.setAttribute('aria-selected','false');
+      } else {
+        effects.classList.add('tab-active');
+        guide.classList.remove('tab-active');
+        tEffects.classList.add('active'); tEffects.setAttribute('aria-selected','true');
+        tGuide.classList.remove('active'); tGuide.setAttribute('aria-selected','false');
+      }
+    }
+  </script>
 
   <script type="module">
     import {
@@ -508,17 +546,17 @@
 
     // ── EFFECT METADATA ────────────────────────────────────────────────────
     const EFFECT_NAMES = [
-      'PENCIL SKETCH', 'OIL PAINT',    'CARTOON',    'ANIME',
-      'WATERCOLOR',    'VAN GOGH',     'CROSS-HATCH', 'WOOL',
-      'OLD MASTER',    'NEON GLOW',    'PIXELATE',    'STIPPLING',
-      'THERMAL',       'POP ART',      'PSYCHEDELIC',
+      'PENCIL SKETCH','OIL PAINT','CARTOON','ANIME',
+      'WATERCOLOR','VAN GOGH','CROSS-HATCH','WOOL',
+      'OLD MASTER','NEON GLOW','PIXELATE','STIPPLING',
+      'THERMAL','POP ART','PSYCHEDELIC',
     ];
     const EFFECT_CATS = [
       'art','art','art','art','art','art','art','art','art',
       'heavy','heavy','heavy',
       'color','color','color',
     ];
-    const CAT_LABEL = { art: 'ART', heavy: 'HEAVY', color: 'COLOR' };
+    const CAT_LABEL = { art:'ART', heavy:'HEAVY', color:'COLOR' };
 
     // ── MEDIAPIPE ──────────────────────────────────────────────────────────
     let handLandmarker = null;
@@ -581,14 +619,31 @@
       EFFECT_NAMES.forEach((name, i) => {
         const li = document.createElement('li');
         li.className = 'e-item';
-        li.setAttribute('role', 'listitem');
+        li.setAttribute('role', 'button');
+        li.setAttribute('tabindex', '0');
+        li.setAttribute('aria-label', `Select effect: ${name}`);
         li.dataset.index = i;
         li.innerHTML =
           `<span class="e-num">${i + 1}</span>` +
           `<span class="e-name">${name}</span>` +
           `<span class="e-badge ${EFFECT_CATS[i]}">${CAT_LABEL[EFFECT_CATS[i]]}</span>`;
+
+        // Click and keyboard selection
+        li.addEventListener('click', () => selectEffect(i));
+        li.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectEffect(i); }
+        });
+
         list.appendChild(li);
       });
+    }
+
+    function selectEffect(i) {
+      currentEffectIndex = i;
+      showEffectLabel(EFFECT_NAMES[i]);
+      updateEffectsList();
+      // On mobile, switch to effects tab so the user sees the active item
+      // (no-op on desktop — tabs are hidden)
     }
 
     function updateEffectsList() {
@@ -607,7 +662,7 @@
 
     async function setupCamera() {
       const stream = await navigator.mediaDevices.getUserMedia({
-        video: { width: { ideal: 640 }, height: { ideal: 480 }, facingMode: 'user', frameRate: { ideal: 30 } },
+        video: { width:{ideal:640}, height:{ideal:480}, facingMode:'user', frameRate:{ideal:30} },
         audio: false,
       });
       video.srcObject = stream;
@@ -631,15 +686,15 @@
           modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task',
           delegate: 'GPU',
         },
-        runningMode: 'VIDEO', numHands: 2,
-        minHandDetectionConfidence: 0.5,
-        minHandPresenceConfidence:  0.5,
-        minTrackingConfidence:      0.5,
+        runningMode:'VIDEO', numHands:2,
+        minHandDetectionConfidence:0.5,
+        minHandPresenceConfidence: 0.5,
+        minTrackingConfidence:     0.5,
       });
     }
 
     // ══════════════════════════════════════════════════════════════════════
-    // RENDER LOOP — requestVideoFrameCallback with rAF fallback (Addendum A1)
+    // RENDER LOOP — requestVideoFrameCallback with rAF fallback
     // ══════════════════════════════════════════════════════════════════════
 
     function startLoop() {
@@ -686,7 +741,7 @@
 
     function processHandResults(results) {
       leftHandData = rightHandData = null;
-      if (!results.landmarks || results.landmarks.length < 2) return;
+      if (!results?.landmarks || results.landmarks.length < 2) return;
       const hands = results.landmarks.slice(0, 2).map((lm) => ({
         thumbTip: mirroredPoint(lm[4]),
         indexTip: mirroredPoint(lm[8]),
@@ -798,7 +853,6 @@
       }
     }
 
-    // GPU-accelerated canvas filter helper (Addendum A3)
     function applyCanvasFilter(imageData, filterString) {
       const { width, height } = imageData;
       const src = document.createElement('canvas');
@@ -826,12 +880,12 @@
               const nx = x + dx, ny = y + dy;
               if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
                 const i = (ny * width + nx) * 4;
-                r += data[i]; g += data[i + 1]; b += data[i + 2]; n++;
+                r += data[i]; g += data[i+1]; b += data[i+2]; n++;
               }
             }
           }
           const i = (y * width + x) * 4;
-          out[i] = r / n; out[i + 1] = g / n; out[i + 2] = b / n; out[i + 3] = data[i + 3];
+          out[i] = r/n; out[i+1] = g/n; out[i+2] = b/n; out[i+3] = data[i+3];
         }
       }
       return new ImageData(out, width, height);
@@ -887,39 +941,33 @@
       ];
     }
 
-    // Maps t [0,1] to rainbow heat: black/blue → cyan → green → yellow → red → white
     function thermalColor(t) {
       if (t < 0.125) return [0, 0, Math.round(t / 0.125 * 255)];
       if (t < 0.375) { const s = (t - 0.125) / 0.25; return [0, Math.round(s * 255), 255]; }
-      if (t < 0.625) { const s = (t - 0.375) / 0.25; return [Math.round(s * 255), 255, Math.round((1 - s) * 255)]; }
-      if (t < 0.875) { const s = (t - 0.625) / 0.25; return [255, Math.round((1 - s) * 255), 0]; }
-      const s = (t - 0.875) / 0.125; return [255, Math.round(s * 255), Math.round(s * 255)];
+      if (t < 0.625) { const s = (t - 0.375) / 0.25; return [Math.round(s * 255), 255, Math.round((1-s)*255)]; }
+      if (t < 0.875) { const s = (t - 0.625) / 0.25; return [255, Math.round((1-s)*255), 0]; }
+      const s = (t - 0.875) / 0.125; return [255, Math.round(s*255), Math.round(s*255)];
     }
 
     // ══════════════════════════════════════════════════════════════════════
-    // ── ORIGINAL 9 EFFECTS ────────────────────────────────────────────────
+    // ART EFFECTS (1–9)
     // ══════════════════════════════════════════════════════════════════════
 
-    // 1 · PENCIL SKETCH — grayscale → invert → blur → color-dodge (Addendum A4)
     function applyPencilSketch() {
       const { width, height } = rect;
       const src = getCropImageData();
-
       const grayID = new ImageData(new Uint8ClampedArray(src.data), width, height);
       applyGrayscaleInPlace(grayID);
-
       const invID = new ImageData(new Uint8ClampedArray(grayID.data), width, height);
       for (let i = 0; i < invID.data.length; i += 4)
         invID.data[i] = invID.data[i+1] = invID.data[i+2] = 255 - invID.data[i];
-
       const blurred = blurImageData(invID, 3);
-
       const bot = document.createElement('canvas'); bot.width = width; bot.height = height;
       bot.getContext('2d').putImageData(grayID, 0, 0);
       const top = document.createElement('canvas'); top.width = width; top.height = height;
       top.getContext('2d').putImageData(blurred, 0, 0);
       const out = document.createElement('canvas'); out.width = width; out.height = height;
-      const oc  = out.getContext('2d');
+      const oc = out.getContext('2d');
       oc.drawImage(bot, 0, 0);
       oc.globalCompositeOperation = 'color-dodge';
       oc.drawImage(top, 0, 0);
@@ -927,317 +975,291 @@
       putCropImageData(oc.getImageData(0, 0, width, height));
     }
 
-    // 2 · OIL PAINT — Kuwahara-style neighbourhood binning
     function applyOilPaint() {
       const { width, height } = rect;
       const src = getCropImageData();
-      const sd  = src.data;
+      const sd = src.data;
       const RADIUS = 4, LEVELS = 20;
       const out = new Uint8ClampedArray(sd.length);
-
       for (let y = 0; y < height; y++) {
         for (let x = 0; x < width; x++) {
           const counts = new Int32Array(LEVELS);
           const rs = new Float32Array(LEVELS), gs = new Float32Array(LEVELS), bs = new Float32Array(LEVELS);
           for (let dy = -RADIUS; dy <= RADIUS; dy++) {
             for (let dx = -RADIUS; dx <= RADIUS; dx++) {
-              if (dx*dx + dy*dy > RADIUS*RADIUS) continue;
-              const nx = x+dx, ny = y+dy;
-              if (nx < 0 || nx >= width || ny < 0 || ny >= height) continue;
-              const i   = (ny * width + nx) * 4;
+              if (dx*dx+dy*dy > RADIUS*RADIUS) continue;
+              const nx=x+dx, ny=y+dy;
+              if (nx<0||nx>=width||ny<0||ny>=height) continue;
+              const i = (ny*width+nx)*4;
               const lev = Math.floor(((sd[i]+sd[i+1]+sd[i+2])/3)*(LEVELS-1)/255);
-              counts[lev]++; rs[lev] += sd[i]; gs[lev] += sd[i+1]; bs[lev] += sd[i+2];
+              counts[lev]++; rs[lev]+=sd[i]; gs[lev]+=sd[i+1]; bs[lev]+=sd[i+2];
             }
           }
-          let mx = 0, mi = 0;
-          for (let l = 0; l < LEVELS; l++) if (counts[l] > mx) { mx = counts[l]; mi = l; }
-          const oi = (y * width + x) * 4;
-          out[oi] = rs[mi]/mx; out[oi+1] = gs[mi]/mx; out[oi+2] = bs[mi]/mx; out[oi+3] = 255;
+          let mx=0, mi=0;
+          for (let l=0;l<LEVELS;l++) if(counts[l]>mx){mx=counts[l];mi=l;}
+          const oi=(y*width+x)*4;
+          out[oi]=rs[mi]/mx; out[oi+1]=gs[mi]/mx; out[oi+2]=bs[mi]/mx; out[oi+3]=255;
         }
       }
       putCropImageData(new ImageData(out, width, height));
     }
 
-    // 3 · CARTOON — posterized colour + Sobel edge overlay
     function applyCartoon() {
       const { width, height } = rect;
       const src = getCropImageData();
-      const bl  = boxBlur(src, 2);
-      const q   = new Uint8ClampedArray(bl.data.length);
-      for (let i = 0; i < bl.data.length; i += 4) {
-        q[i] = Math.floor(bl.data[i]/42)*42; q[i+1] = Math.floor(bl.data[i+1]/42)*42;
-        q[i+2] = Math.floor(bl.data[i+2]/42)*42; q[i+3] = 255;
+      const bl = boxBlur(src, 2);
+      const q = new Uint8ClampedArray(bl.data.length);
+      for (let i=0;i<bl.data.length;i+=4) {
+        q[i]=Math.floor(bl.data[i]/42)*42; q[i+1]=Math.floor(bl.data[i+1]/42)*42;
+        q[i+2]=Math.floor(bl.data[i+2]/42)*42; q[i+3]=255;
       }
       const { magnitude } = sobelGradient(toGrayscaleArray(src), width, height);
       const out = new Uint8ClampedArray(q);
-      for (let i = 0; i < width*height; i++)
-        if (magnitude[i] > 60) out[i*4] = out[i*4+1] = out[i*4+2] = 0;
+      for (let i=0;i<width*height;i++)
+        if(magnitude[i]>60) out[i*4]=out[i*4+1]=out[i*4+2]=0;
       putCropImageData(new ImageData(out, width, height));
     }
 
-    // 4 · ANIME — vivid saturation + screen-tone dots + thick outlines
     function applyAnime() {
       const { width, height } = rect;
-      const src      = getCropImageData();
-      const boosted  = applyCanvasFilter(src, 'saturate(160%)').data;
-      const q        = new Uint8ClampedArray(boosted.length);
-      for (let i = 0; i < boosted.length; i += 4) {
-        q[i] = Math.floor(boosted[i]/32)*32; q[i+1] = Math.floor(boosted[i+1]/32)*32;
-        q[i+2] = Math.floor(boosted[i+2]/32)*32; q[i+3] = 255;
+      const src = getCropImageData();
+      const boosted = applyCanvasFilter(src, 'saturate(160%)').data;
+      const q = new Uint8ClampedArray(boosted.length);
+      for (let i=0;i<boosted.length;i+=4) {
+        q[i]=Math.floor(boosted[i]/32)*32; q[i+1]=Math.floor(boosted[i+1]/32)*32;
+        q[i+2]=Math.floor(boosted[i+2]/32)*32; q[i+3]=255;
       }
       const { magnitude } = sobelGradient(toGrayscaleArray(src), width, height);
       const out = new Uint8ClampedArray(q);
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          const i = y*width+x, pi = i*4;
-          const lum = 0.299*out[pi] + 0.587*out[pi+1] + 0.114*out[pi+2];
-          if (lum < 80 && (x%4 < 2) && (y%4 < 2)) out[pi] = out[pi+1] = out[pi+2] = 20;
-          if (magnitude[i] > 40) out[pi] = out[pi+1] = out[pi+2] = 0;
+      for (let y=0;y<height;y++) {
+        for (let x=0;x<width;x++) {
+          const i=y*width+x, pi=i*4;
+          const lum=0.299*out[pi]+0.587*out[pi+1]+0.114*out[pi+2];
+          if(lum<80&&(x%4<2)&&(y%4<2)) out[pi]=out[pi+1]=out[pi+2]=20;
+          if(magnitude[i]>40) out[pi]=out[pi+1]=out[pi+2]=0;
         }
       }
       putCropImageData(new ImageData(out, width, height));
     }
 
-    // 5 · WATERCOLOR — multi-pass blur + edge re-sharpening + paper texture
     function applyWatercolor() {
       const { width, height } = rect;
       const src = getCropImageData();
       let bl = boxBlur(src, 3); bl = boxBlur(bl, 2); bl = boxBlur(bl, 1);
       const { magnitude } = sobelGradient(toGrayscaleArray(src), width, height);
       const out = new Uint8ClampedArray(bl.data.length);
-      for (let i = 0; i < width*height; i++) {
-        const pi = i*4, ef = Math.min(1, magnitude[i]/120)*0.35;
-        out[pi]   = bl.data[pi]   *(1-ef) + src.data[pi]   *ef;
-        out[pi+1] = bl.data[pi+1] *(1-ef) + src.data[pi+1] *ef;
-        out[pi+2] = bl.data[pi+2] *(1-ef) + src.data[pi+2] *ef;
-        out[pi+3] = 255;
+      for (let i=0;i<width*height;i++) {
+        const pi=i*4, ef=Math.min(1,magnitude[i]/120)*0.35;
+        out[pi]  =bl.data[pi]  *(1-ef)+src.data[pi]  *ef;
+        out[pi+1]=bl.data[pi+1]*(1-ef)+src.data[pi+1]*ef;
+        out[pi+2]=bl.data[pi+2]*(1-ef)+src.data[pi+2]*ef;
+        out[pi+3]=255;
       }
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          const pi    = (y*width+x)*4;
-          const noise = 0.85 + 0.15*(0.5 + 0.5*Math.sin(x*17.3)*Math.sin(y*13.7));
-          out[pi]   = Math.min(255, out[pi]   *noise + (1-noise)*255);
-          out[pi+1] = Math.min(255, out[pi+1] *noise + (1-noise)*255);
-          out[pi+2] = Math.min(255, out[pi+2] *noise + (1-noise)*255);
+      for (let y=0;y<height;y++) {
+        for (let x=0;x<width;x++) {
+          const pi=(y*width+x)*4;
+          const noise=0.85+0.15*(0.5+0.5*Math.sin(x*17.3)*Math.sin(y*13.7));
+          out[pi]  =Math.min(255,out[pi]  *noise+(1-noise)*255);
+          out[pi+1]=Math.min(255,out[pi+1]*noise+(1-noise)*255);
+          out[pi+2]=Math.min(255,out[pi+2]*noise+(1-noise)*255);
         }
       }
-      for (let i = 0; i < out.length; i += 4) {
-        const lum = 0.299*out[i] + 0.587*out[i+1] + 0.114*out[i+2];
-        if (lum < 90) { const t = 0.4; out[i] = out[i]*(1-t)+lum*t; out[i+1] = out[i+1]*(1-t)+lum*t; out[i+2] = out[i+2]*(1-t)+lum*t; }
+      for (let i=0;i<out.length;i+=4) {
+        const lum=0.299*out[i]+0.587*out[i+1]+0.114*out[i+2];
+        if(lum<90){const t=0.4;out[i]=out[i]*(1-t)+lum*t;out[i+1]=out[i+1]*(1-t)+lum*t;out[i+2]=out[i+2]*(1-t)+lum*t;}
       }
       putCropImageData(new ImageData(out, width, height));
     }
 
-    // 6 · VAN GOGH — gradient-flow oriented brush strokes
     function applyVanGogh() {
       const { x:rx, y:ry, width, height } = rect;
       const src = getCropImageData();
       const tmp = document.createElement('canvas');
-      tmp.width = width; tmp.height = height;
-      tmp.getContext('2d').putImageData(blurImageData(src, 2), 0, 0);
+      tmp.width=width; tmp.height=height;
+      tmp.getContext('2d').putImageData(blurImageData(src,2),0,0);
       ctx.save();
-      ctx.globalAlpha = 0.5; ctx.drawImage(tmp, rx, ry); ctx.globalAlpha = 1;
+      ctx.globalAlpha=0.5; ctx.drawImage(tmp,rx,ry); ctx.globalAlpha=1;
       const { gx, gy } = sobelGradient(toGrayscaleArray(src), width, height);
-      ctx.lineWidth = 3; ctx.lineCap = 'round';
-      const GRID = 6, SL = 13;
-      for (let y = Math.floor(GRID/2); y < height; y += GRID) {
-        for (let x = Math.floor(GRID/2); x < width; x += GRID) {
-          const idx = y*width+x, pi = idx*4;
-          const ang = Math.atan2(gy[idx], gx[idx]) + Math.PI/2;
-          const cos = Math.cos(ang), sin = Math.sin(ang);
-          const v = () => Math.floor((Math.random()-0.5)*22);
+      ctx.lineWidth=3; ctx.lineCap='round';
+      const GRID=6, SL=13;
+      for (let y=Math.floor(GRID/2);y<height;y+=GRID) {
+        for (let x=Math.floor(GRID/2);x<width;x+=GRID) {
+          const idx=y*width+x, pi=idx*4;
+          const ang=Math.atan2(gy[idx],gx[idx])+Math.PI/2;
+          const cos=Math.cos(ang), sin=Math.sin(ang);
+          const v=()=>Math.floor((Math.random()-0.5)*22);
           ctx.beginPath();
-          ctx.strokeStyle = `rgb(${Math.min(255,Math.max(0,src.data[pi]+v()))},${Math.min(255,Math.max(0,src.data[pi+1]+v()))},${Math.min(255,Math.max(0,src.data[pi+2]+v()))})`;
-          ctx.moveTo(rx+x-cos*SL, ry+y-sin*SL); ctx.lineTo(rx+x+cos*SL, ry+y+sin*SL); ctx.stroke();
+          ctx.strokeStyle=`rgb(${Math.min(255,Math.max(0,src.data[pi]+v()))},${Math.min(255,Math.max(0,src.data[pi+1]+v()))},${Math.min(255,Math.max(0,src.data[pi+2]+v()))})`;
+          ctx.moveTo(rx+x-cos*SL,ry+y-sin*SL); ctx.lineTo(rx+x+cos*SL,ry+y+sin*SL); ctx.stroke();
         }
       }
       ctx.restore();
     }
 
-    // 7 · CROSS-HATCH — luminance-driven steel-engraving lines
     function applyCrossHatch() {
       const { x:rx, y:ry, width, height } = rect;
       const gray = toGrayscaleArray(getCropImageData());
       ctx.save();
-      ctx.beginPath(); ctx.rect(rx, ry, width, height); ctx.clip();
-      ctx.fillStyle = '#f5f0e8'; ctx.fillRect(rx, ry, width, height);
-      ctx.strokeStyle = '#1a1208'; ctx.lineWidth = 0.9;
-      const LAYERS = [
-        { angle: Math.PI/4,  threshold: 195 },
-        { angle: -Math.PI/4, threshold: 145 },
-        { angle: 0,          threshold: 95  },
-        { angle: Math.PI/2,  threshold: 50  },
+      ctx.beginPath(); ctx.rect(rx,ry,width,height); ctx.clip();
+      ctx.fillStyle='#f5f0e8'; ctx.fillRect(rx,ry,width,height);
+      ctx.strokeStyle='#1a1208'; ctx.lineWidth=0.9;
+      const LAYERS=[
+        {angle:Math.PI/4, threshold:195},
+        {angle:-Math.PI/4,threshold:145},
+        {angle:0,         threshold:95},
+        {angle:Math.PI/2, threshold:50},
       ];
-      const diag = Math.ceil(Math.sqrt(width*width + height*height));
+      const diag=Math.ceil(Math.sqrt(width*width+height*height));
       for (const { angle, threshold } of LAYERS) {
-        const cos = Math.cos(angle), sin = Math.sin(angle);
-        const px = -sin, py = cos;
-        for (let off = -diag; off < diag; off += 8) {
-          const ocx = width/2 + px*off, ocy = height/2 + py*off;
-          const mx = Math.round(ocx), my = Math.round(ocy);
-          if (mx < 0 || mx >= width || my < 0 || my >= height) continue;
-          if (gray[my*width+mx] >= threshold) continue;
+        const cos=Math.cos(angle), sin=Math.sin(angle);
+        const px=-sin, py=cos;
+        for (let off=-diag;off<diag;off+=8) {
+          const ocx=width/2+px*off, ocy=height/2+py*off;
+          const mx=Math.round(ocx), my=Math.round(ocy);
+          if(mx<0||mx>=width||my<0||my>=height) continue;
+          if(gray[my*width+mx]>=threshold) continue;
           ctx.beginPath();
-          ctx.moveTo(rx+ocx-cos*diag, ry+ocy-sin*diag);
-          ctx.lineTo(rx+ocx+cos*diag, ry+ocy+sin*diag); ctx.stroke();
+          ctx.moveTo(rx+ocx-cos*diag,ry+ocy-sin*diag);
+          ctx.lineTo(rx+ocx+cos*diag,ry+ocy+sin*diag); ctx.stroke();
         }
       }
       ctx.restore();
     }
 
-    // 8 · WOOL — gradient-following fiber strokes with sinusoidal wobble
     function applyWool() {
       const { x:rx, y:ry, width, height } = rect;
       const src = getCropImageData();
       const tmp = document.createElement('canvas');
-      tmp.width = width; tmp.height = height;
-      tmp.getContext('2d').putImageData(src, 0, 0);
+      tmp.width=width; tmp.height=height;
+      tmp.getContext('2d').putImageData(src,0,0);
       ctx.save();
-      ctx.globalAlpha = 0.35; ctx.drawImage(tmp, rx, ry); ctx.globalAlpha = 1;
-      ctx.fillStyle = 'rgba(240,234,220,0.55)'; ctx.fillRect(rx, ry, width, height);
+      ctx.globalAlpha=0.35; ctx.drawImage(tmp,rx,ry); ctx.globalAlpha=1;
+      ctx.fillStyle='rgba(240,234,220,0.55)'; ctx.fillRect(rx,ry,width,height);
       const { gx, gy } = sobelGradient(toGrayscaleArray(src), width, height);
-      ctx.lineWidth = 1.8; ctx.lineCap = 'round';
-      const STEP = 5, FL = 10, WOBBLE = 2.5;
-      for (let y = 0; y < height; y += STEP) {
-        for (let x = 0; x < width; x += STEP) {
-          const idx = y*width+x, pi = idx*4;
-          const ang = Math.atan2(gy[idx], gx[idx]) + Math.PI/2;
-          const cos = Math.cos(ang), sin = Math.sin(ang);
-          const pc = -sin, ps = cos;
-          const wb = WOBBLE * Math.sin(x*0.42 + y*0.31);
-          const sx = rx+x, sy = ry+y;
-          ctx.strokeStyle = `rgb(${src.data[pi]},${src.data[pi+1]},${src.data[pi+2]})`;
+      ctx.lineWidth=1.8; ctx.lineCap='round';
+      const STEP=5, FL=10, WOBBLE=2.5;
+      for (let y=0;y<height;y+=STEP) {
+        for (let x=0;x<width;x+=STEP) {
+          const idx=y*width+x, pi=idx*4;
+          const ang=Math.atan2(gy[idx],gx[idx])+Math.PI/2;
+          const cos=Math.cos(ang), sin=Math.sin(ang);
+          const pc=-sin, ps=cos;
+          const wb=WOBBLE*Math.sin(x*0.42+y*0.31);
+          ctx.strokeStyle=`rgb(${src.data[pi]},${src.data[pi+1]},${src.data[pi+2]})`;
           ctx.beginPath();
-          ctx.moveTo(sx-cos*FL+pc*wb, sy-sin*FL+ps*wb);
-          ctx.quadraticCurveTo(sx+pc*(wb*0.5), sy+ps*(wb*0.5), sx+cos*FL-pc*wb, sy+sin*FL-ps*wb);
+          ctx.moveTo(rx+x-cos*FL+pc*wb, ry+y-sin*FL+ps*wb);
+          ctx.quadraticCurveTo(rx+x+pc*(wb*0.5),ry+y+ps*(wb*0.5),rx+x+cos*FL-pc*wb,ry+y+sin*FL-ps*wb);
           ctx.stroke();
         }
       }
       ctx.restore();
     }
 
-    // 9 · OLD MASTER — warm sfumato + craquelure varnish cracks + grain
     function applyOldMaster() {
       const { width, height } = rect;
-      const src    = getCropImageData();
-      const graded = applyCanvasFilter(src, 'sepia(45%) contrast(108%) saturate(115%)');
-      const d      = graded.data;
-      const sharp  = new Uint8ClampedArray(d);
-      const blurD  = blurImageData(graded, 1.5).data;
-      for (let i = 0; i < d.length; i += 4) {
-        d[i]   = blurD[i]   *0.75 + sharp[i]   *0.25;
-        d[i+1] = blurD[i+1] *0.75 + sharp[i+1] *0.25;
-        d[i+2] = blurD[i+2] *0.75 + sharp[i+2] *0.25;
+      const src = getCropImageData();
+      const graded = applyCanvasFilter(src,'sepia(45%) contrast(108%) saturate(115%)');
+      const d = graded.data;
+      const sharp = new Uint8ClampedArray(d);
+      const blurD = blurImageData(graded,1.5).data;
+      for (let i=0;i<d.length;i+=4) {
+        d[i]  =blurD[i]  *0.75+sharp[i]  *0.25;
+        d[i+1]=blurD[i+1]*0.75+sharp[i+1]*0.25;
+        d[i+2]=blurD[i+2]*0.75+sharp[i+2]*0.25;
       }
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          const pi = (y*width+x)*4;
-          const c1 = Math.abs(Math.sin(x*0.15 + Math.sin(y*0.05)*10));
-          const c2 = Math.abs(Math.sin(y*0.12 + Math.sin(x*0.06)*8));
-          if (c1 < 0.06 || c2 < 0.06) {
-            d[pi] = Math.max(0,d[pi]-28); d[pi+1] = Math.max(0,d[pi+1]-20); d[pi+2] = Math.max(0,d[pi+2]-14);
+      for (let y=0;y<height;y++) {
+        for (let x=0;x<width;x++) {
+          const pi=(y*width+x)*4;
+          const c1=Math.abs(Math.sin(x*0.15+Math.sin(y*0.05)*10));
+          const c2=Math.abs(Math.sin(y*0.12+Math.sin(x*0.06)*8));
+          if(c1<0.06||c2<0.06){
+            d[pi]=Math.max(0,d[pi]-28); d[pi+1]=Math.max(0,d[pi+1]-20); d[pi+2]=Math.max(0,d[pi+2]-14);
           }
         }
       }
-      for (let i = 0; i < d.length; i += 4) {
-        const n = (Math.random()-0.5)*14;
-        d[i]   = Math.min(255,Math.max(0,d[i]+n));
-        d[i+1] = Math.min(255,Math.max(0,d[i+1]+n*0.8));
-        d[i+2] = Math.min(255,Math.max(0,d[i+2]+n*0.55));
+      for (let i=0;i<d.length;i+=4) {
+        const n=(Math.random()-0.5)*14;
+        d[i]  =Math.min(255,Math.max(0,d[i]+n));
+        d[i+1]=Math.min(255,Math.max(0,d[i+1]+n*0.8));
+        d[i+2]=Math.min(255,Math.max(0,d[i+2]+n*0.55));
       }
       putCropImageData(graded);
     }
 
     // ══════════════════════════════════════════════════════════════════════
-    // ── 3 NEW HEAVY EFFECTS ───────────────────────────────────────────────
+    // HEAVY EFFECTS (10–12)
     // ══════════════════════════════════════════════════════════════════════
 
-    // 10 · NEON GLOW — colored edge lines glow on pure black background
     function applyNeonGlow() {
       const { width, height } = rect;
       const src = getCropImageData();
       const { gx, gy, magnitude } = sobelGradient(toGrayscaleArray(src), width, height);
       const THRESH = 35;
-
-      // Build colored edge layer — non-edge pixels stay black (0,0,0,255)
       const edgeLayer = new Uint8ClampedArray(width * height * 4);
-      for (let i = 0; i < width * height; i++) {
-        edgeLayer[i * 4 + 3] = 255; // fully opaque everywhere (for clean blur)
-        if (magnitude[i] < THRESH) continue;
-        const hue    = (Math.atan2(gy[i], gx[i]) / (Math.PI * 2) + 0.5) % 1;
-        const bright = Math.min(1, magnitude[i] / 160);
-        const [r, g, b] = hslToRgb(hue, 1, 0.45 + bright * 0.35);
-        edgeLayer[i * 4]     = r;
-        edgeLayer[i * 4 + 1] = g;
-        edgeLayer[i * 4 + 2] = b;
+      for (let i=0;i<width*height;i++) {
+        edgeLayer[i*4+3]=255;
+        if(magnitude[i]<THRESH) continue;
+        const hue=(Math.atan2(gy[i],gx[i])/(Math.PI*2)+0.5)%1;
+        const bright=Math.min(1,magnitude[i]/160);
+        const [r,g,b]=hslToRgb(hue,1,0.45+bright*0.35);
+        edgeLayer[i*4]=r; edgeLayer[i*4+1]=g; edgeLayer[i*4+2]=b;
       }
-
-      // Blur edge layer to produce halo glow
-      const glowID = blurImageData(new ImageData(edgeLayer, width, height), 4);
-
-      // Additive composite: glow * 1.7 + sharp edges
-      const out = new Uint8ClampedArray(width * height * 4);
-      for (let i = 0; i < width * height; i++) {
-        const pi = i * 4;
-        out[pi]     = Math.min(255, glowID.data[pi]     * 1.7 + edgeLayer[pi]);
-        out[pi + 1] = Math.min(255, glowID.data[pi + 1] * 1.7 + edgeLayer[pi + 1]);
-        out[pi + 2] = Math.min(255, glowID.data[pi + 2] * 1.7 + edgeLayer[pi + 2]);
-        out[pi + 3] = 255;
+      const glowID = blurImageData(new ImageData(edgeLayer,width,height),4);
+      const out = new Uint8ClampedArray(width*height*4);
+      for (let i=0;i<width*height;i++) {
+        const pi=i*4;
+        out[pi]  =Math.min(255,glowID.data[pi]  *1.7+edgeLayer[pi]);
+        out[pi+1]=Math.min(255,glowID.data[pi+1]*1.7+edgeLayer[pi+1]);
+        out[pi+2]=Math.min(255,glowID.data[pi+2]*1.7+edgeLayer[pi+2]);
+        out[pi+3]=255;
       }
-      putCropImageData(new ImageData(out, width, height));
+      putCropImageData(new ImageData(out,width,height));
     }
 
-    // 11 · PIXELATE — chunky mosaic blocks (average color per block)
     function applyPixelate() {
       const { width, height } = rect;
       const src = getCropImageData();
-      const sd  = src.data;
+      const sd = src.data;
       const BLOCK = 14;
       const out = new Uint8ClampedArray(sd.length);
-
-      for (let by = 0; by < height; by += BLOCK) {
-        for (let bx = 0; bx < width; bx += BLOCK) {
-          let r = 0, g = 0, b = 0, n = 0;
-          for (let dy = 0; dy < BLOCK && by+dy < height; dy++) {
-            for (let dx = 0; dx < BLOCK && bx+dx < width; dx++) {
-              const pi = ((by+dy)*width+(bx+dx))*4;
-              r += sd[pi]; g += sd[pi+1]; b += sd[pi+2]; n++;
+      for (let by=0;by<height;by+=BLOCK) {
+        for (let bx=0;bx<width;bx+=BLOCK) {
+          let r=0,g=0,b=0,n=0;
+          for (let dy=0;dy<BLOCK&&by+dy<height;dy++) {
+            for (let dx=0;dx<BLOCK&&bx+dx<width;dx++) {
+              const pi=((by+dy)*width+(bx+dx))*4;
+              r+=sd[pi]; g+=sd[pi+1]; b+=sd[pi+2]; n++;
             }
           }
-          r = r/n; g = g/n; b = b/n;
-          for (let dy = 0; dy < BLOCK && by+dy < height; dy++) {
-            for (let dx = 0; dx < BLOCK && bx+dx < width; dx++) {
-              const pi = ((by+dy)*width+(bx+dx))*4;
-              out[pi] = r; out[pi+1] = g; out[pi+2] = b; out[pi+3] = 255;
+          r=r/n; g=g/n; b=b/n;
+          for (let dy=0;dy<BLOCK&&by+dy<height;dy++) {
+            for (let dx=0;dx<BLOCK&&bx+dx<width;dx++) {
+              const pi=((by+dy)*width+(bx+dx))*4;
+              out[pi]=r; out[pi+1]=g; out[pi+2]=b; out[pi+3]=255;
             }
           }
         }
       }
-      putCropImageData(new ImageData(out, width, height));
+      putCropImageData(new ImageData(out,width,height));
     }
 
-    // 12 · STIPPLING — varying-radius dots on cream paper (draws to ctx directly)
     function applyStippling() {
       const { x:rx, y:ry, width, height } = rect;
-      const src  = getCropImageData();
+      const src = getCropImageData();
       const gray = toGrayscaleArray(src);
-
       ctx.save();
-      ctx.fillStyle = '#f9f5ec';
-      ctx.fillRect(rx, ry, width, height);
-      ctx.fillStyle = '#1c160a';
-
-      const STEP = 4;
-      for (let y = 0; y < height; y += STEP) {
-        for (let x = 0; x < width; x += STEP) {
-          const darkness = 1 - gray[y * width + x] / 255;
-          if (darkness < 0.08) continue;
-          // Dot radius proportional to darkness (range 0.3 – 2.4 px)
-          const r  = darkness * 2.2 + 0.3;
-          const jx = (Math.random() - 0.5) * STEP * 0.55;
-          const jy = (Math.random() - 0.5) * STEP * 0.55;
+      ctx.fillStyle='#f9f5ec'; ctx.fillRect(rx,ry,width,height);
+      ctx.fillStyle='#1c160a';
+      const STEP=4;
+      for (let y=0;y<height;y+=STEP) {
+        for (let x=0;x<width;x+=STEP) {
+          const darkness=1-gray[y*width+x]/255;
+          if(darkness<0.08) continue;
+          const r=darkness*2.2+0.3;
+          const jx=(Math.random()-0.5)*STEP*0.55;
+          const jy=(Math.random()-0.5)*STEP*0.55;
           ctx.beginPath();
-          ctx.arc(rx + x + jx, ry + y + jy, r, 0, Math.PI * 2);
+          ctx.arc(rx+x+jx,ry+y+jy,r,0,Math.PI*2);
           ctx.fill();
         }
       }
@@ -1245,64 +1267,55 @@
     }
 
     // ══════════════════════════════════════════════════════════════════════
-    // ── 3 NEW COLORFUL EFFECTS ────────────────────────────────────────────
+    // COLORFUL EFFECTS (13–15)
     // ══════════════════════════════════════════════════════════════════════
 
-    // 13 · THERMAL — infrared heat-map (black/blue → cyan → green → yellow → red → white)
     function applyThermal() {
       const { width, height } = rect;
-      const src  = getCropImageData();
+      const src = getCropImageData();
       const gray = toGrayscaleArray(src);
-      const out  = new Uint8ClampedArray(src.data.length);
-      for (let i = 0; i < width * height; i++) {
-        const [r, g, b] = thermalColor(gray[i] / 255);
-        out[i*4] = r; out[i*4+1] = g; out[i*4+2] = b; out[i*4+3] = 255;
+      const out = new Uint8ClampedArray(src.data.length);
+      for (let i=0;i<width*height;i++) {
+        const [r,g,b]=thermalColor(gray[i]/255);
+        out[i*4]=r; out[i*4+1]=g; out[i*4+2]=b; out[i*4+3]=255;
       }
-      putCropImageData(new ImageData(out, width, height));
+      putCropImageData(new ImageData(out,width,height));
     }
 
-    // 14 · POP ART — Warhol-style: extreme saturation + hard 4-level posterization
     function applyPopArt() {
       const { width, height } = rect;
       const src = getCropImageData();
-      // GPU path: extreme saturation + contrast boost
-      const vivid = applyCanvasFilter(src, 'saturate(750%) contrast(180%)');
+      const vivid = applyCanvasFilter(src,'saturate(750%) contrast(180%)');
       const d = vivid.data;
-      // Hard posterize to 4 levels per channel (creates flat color regions)
-      for (let i = 0; i < d.length; i += 4) {
-        d[i]   = Math.floor(d[i]   / 64) * 85;
-        d[i+1] = Math.floor(d[i+1] / 64) * 85;
-        d[i+2] = Math.floor(d[i+2] / 64) * 85;
-        d[i+3] = 255;
+      for (let i=0;i<d.length;i+=4) {
+        d[i]  =Math.floor(d[i]  /64)*85;
+        d[i+1]=Math.floor(d[i+1]/64)*85;
+        d[i+2]=Math.floor(d[i+2]/64)*85;
+        d[i+3]=255;
       }
       putCropImageData(vivid);
     }
 
-    // 15 · PSYCHEDELIC — time-animated hue waves + boosted saturation
     function applyPsychedelic() {
       const { width, height } = rect;
       const src = getCropImageData();
-      const d   = src.data;
+      const d = src.data;
       const out = new Uint8ClampedArray(d.length);
-      // Slow time drift: creates organic color cycling when holding still
       const t = performance.now() * 0.0012;
-
-      for (let y = 0; y < height; y++) {
-        for (let x = 0; x < width; x++) {
-          const pi = (y * width + x) * 4;
-          const [h, s, l] = rgbToHsl(d[pi], d[pi+1], d[pi+2]);
-          // Hue shift: position waves + time drift
-          const shift = Math.sin(x * 0.038 + l * 7 + t)          * 0.13
-                      + Math.cos(y * 0.032 + l * 5 + t * 0.65)   * 0.10
-                      + x / (width  * 3.5)
-                      + y / (height * 3.5);
-          const newH = (h + shift + 2) % 1;
-          const newS = Math.min(1, s * 1.6 + 0.35);
-          const [r, g, b] = hslToRgb(newH, newS, l);
-          out[pi] = r; out[pi+1] = g; out[pi+2] = b; out[pi+3] = 255;
+      for (let y=0;y<height;y++) {
+        for (let x=0;x<width;x++) {
+          const pi=(y*width+x)*4;
+          const [h,s,l]=rgbToHsl(d[pi],d[pi+1],d[pi+2]);
+          const shift = Math.sin(x*0.038+l*7+t)*0.13
+                      + Math.cos(y*0.032+l*5+t*0.65)*0.10
+                      + x/(width*3.5) + y/(height*3.5);
+          const newH=(h+shift+2)%1;
+          const newS=Math.min(1,s*1.6+0.35);
+          const [r,g,b]=hslToRgb(newH,newS,l);
+          out[pi]=r; out[pi+1]=g; out[pi+2]=b; out[pi+3]=255;
         }
       }
-      putCropImageData(new ImageData(out, width, height));
+      putCropImageData(new ImageData(out,width,height));
     }
 
     // ══════════════════════════════════════════════════════════════════════
@@ -1320,30 +1333,26 @@
 
       ctx.save();
 
-      // Dashed cyan rectangle
-      ctx.strokeStyle = 'rgba(0, 217, 255, 0.82)';
-      ctx.lineWidth   = 2;
-      ctx.setLineDash([6, 4]);
-      ctx.strokeRect(rect.x, rect.y, rect.width, rect.height);
+      ctx.strokeStyle='rgba(0,217,255,0.82)';
+      ctx.lineWidth=2; ctx.setLineDash([6,4]);
+      ctx.strokeRect(rect.x,rect.y,rect.width,rect.height);
       ctx.setLineDash([]);
 
-      // Fingertip dots — solid cyan with outer ring
       const tips = [
         leftHandData.thumbTip,  leftHandData.indexTip,
         rightHandData.thumbTip, rightHandData.indexTip,
       ];
       for (const pt of tips) {
-        ctx.beginPath(); ctx.arc(pt.x, pt.y, 5.5, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(0, 217, 255, 0.95)'; ctx.fill();
-        ctx.beginPath(); ctx.arc(pt.x, pt.y, 9, 0, Math.PI * 2);
-        ctx.strokeStyle = 'rgba(0, 217, 255, 0.30)'; ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.beginPath(); ctx.arc(pt.x,pt.y,5.5,0,Math.PI*2);
+        ctx.fillStyle='rgba(0,217,255,0.95)'; ctx.fill();
+        ctx.beginPath(); ctx.arc(pt.x,pt.y,9,0,Math.PI*2);
+        ctx.strokeStyle='rgba(0,217,255,0.30)'; ctx.lineWidth=1.5; ctx.stroke();
       }
 
-      // Collapse-progress fill (cyan tint grows as hands converge)
       if (collapseFrameCount > 0) {
         const p = Math.min(1, collapseFrameCount / COLLAPSE_FRAMES_NEEDED);
         ctx.globalAlpha = p * 0.28;
-        ctx.fillStyle   = '#00d9ff';
+        ctx.fillStyle = '#00d9ff';
         ctx.fillRect(rect.x, rect.y, rect.width, rect.height);
         ctx.globalAlpha = 1;
       }
